@@ -3,19 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniDash Pro - Master Boilerplate</title>
+    <title>OmniDash Pro - Cloud Database</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], },
-                    colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' } }
-                }
-            }
+            theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], }, colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' } } } }
         }
     </script>
 
@@ -23,588 +18,224 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .sidebar-transition { transition: transform 0.3s ease-in-out; }
-        
-        @media print {
-            body * { visibility: hidden; }
-            #printable-invoice, #printable-invoice * { visibility: visible; }
-            #printable-invoice { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
-            #app-layout { display: none !important; }
-        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden antialiased selection:bg-brand-100 selection:text-brand-900">
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden antialiased">
 
     <!-- LOGIN SCREEN -->
-    <div id="auth-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 p-4 transition-opacity duration-500">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+    <div id="auth-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 p-4">
         <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md relative z-10 border border-slate-100">
             <div class="flex justify-center mb-6">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg text-white">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </div>
             </div>
-            <h1 class="text-3xl font-extrabold text-center text-slate-900 tracking-tight">OmniDash Pro</h1>
-            <p class="text-center text-slate-500 mt-2 mb-8 text-sm font-medium">Universal Business Control Center</p>
+            <h1 class="text-3xl font-extrabold text-center text-slate-900">OmniDash Pro</h1>
+            <p class="text-center text-slate-500 mt-2 mb-8 text-sm">Supabase Cloud Edition</p>
             
             <form id="login-form" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Business Email</label>
-                    <input type="email" required placeholder="admin@business.com" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition font-medium">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
-                    <input type="password" required placeholder="••••••••" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition font-medium">
-                </div>
-                <button type="submit" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3.5 rounded-xl transition shadow-lg">Access Dashboard</button>
+                <div><input type="email" required placeholder="admin@business.com" class="w-full p-3.5 bg-slate-50 border rounded-xl outline-none font-medium"></div>
+                <div><input type="password" required placeholder="••••••••" class="w-full p-3.5 bg-slate-50 border rounded-xl outline-none font-medium"></div>
+                <button type="submit" id="login-btn" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl transition">Connect to Cloud Database</button>
             </form>
         </div>
     </div>
 
     <!-- MAIN APP LAYOUT -->
     <div id="app-layout" class="hidden w-full h-full flex-col md:flex-row relative">
-        
-        <!-- Mobile Header -->
-        <header class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center z-30">
-            <div class="flex items-center gap-2 text-slate-900 font-extrabold text-xl">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-brand-600"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                OmniDash
-            </div>
-            <button onclick="toggleMobileMenu()" class="p-2 bg-slate-100 rounded-lg">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </button>
-        </header>
-        <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden backdrop-blur-sm"></div>
-        
         <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform -translate-x-full md:translate-x-0 md:relative md:flex-shrink-0 shadow-2xl md:shadow-none">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col md:relative md:flex-shrink-0 shadow-2xl md:shadow-none">
             <div class="p-6 flex items-center gap-3 border-b border-slate-100">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center text-white shadow-md">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 </div>
-                <div>
-                    <h2 class="text-slate-900 font-extrabold text-lg leading-tight">OmniDash</h2>
-                    <p class="text-[10px] font-black text-brand-600 uppercase tracking-widest">Master Boilerplate</p>
-                </div>
+                <div><h2 class="text-slate-900 font-extrabold text-lg">OmniDash</h2><p class="text-[10px] font-black text-brand-600 uppercase">Cloud Linked</p></div>
             </div>
             
             <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard
-                </button>
-                <button onclick="switchTab('transactions')" id="nav-transactions" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Orders & Fraud AI
-                </button>
-                <button onclick="switchTab('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> Catalog & B2B
-                </button>
-                <button onclick="switchTab('customers')" id="nav-customers" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Customer CRM
-                </button>
-                <button onclick="switchTab('reports')" id="nav-reports" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Sales Reports
-                </button>
-                <button onclick="switchTab('marketing')" id="nav-marketing" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Promos
-                </button>
-                
-                <div class="pt-4 mt-4 border-t border-slate-100">
-                    <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">System</p>
-                    <button onclick="switchTab('theme')" id="nav-theme" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Theme Integration
-                    </button>
-                    <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings & Couriers
-                    </button>
-                </div>
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</button>
+                <button onclick="switchTab('transactions')" id="nav-transactions" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</button>
+                <button onclick="switchTab('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg> Catalog</button>
             </nav>
-            <div class="p-4 border-t border-slate-100">
-                <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-xl transition font-bold">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Sign Out
-                </button>
-            </div>
+            <div class="p-4 border-t"><button onclick="location.reload()" class="w-full py-2.5 text-sm text-red-600 font-bold">Sign Out</button></div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
+        <!-- MAIN CONTENT -->
         <main class="flex-1 overflow-y-auto relative bg-slate-50/50">
             <div class="p-4 md:p-8 w-full max-w-7xl mx-auto pb-24">
                 
-                <!-- 1. DASHBOARD -->
+                <!-- DASHBOARD -->
                 <div id="view-dashboard" class="block animate-fade-in">
-                    <div class="mb-8">
-                        <h2 class="text-3xl font-extrabold text-slate-900" id="store-greeting">Dashboard</h2>
-                        <p class="text-slate-500 mt-1 font-medium">Business overview & quick alerts.</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-brand-500 flex flex-col group">
-                            <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Total Revenue</p>
-                            <p class="text-3xl font-black text-slate-900" id="stat-revenue">$0</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-amber-500 flex flex-col group">
-                            <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Pending Orders</p>
-                            <p class="text-3xl font-black text-amber-600" id="stat-pending">0</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-emerald-500 flex flex-col group">
-                            <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Total Customers</p>
-                            <p class="text-3xl font-black text-emerald-600" id="stat-customers">0</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-red-500 flex flex-col group relative overflow-hidden">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center opacity-50">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500 mt-2 mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                            </div>
-                            <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 z-10">High Risk Orders</p>
-                            <p class="text-3xl font-black text-red-600 z-10" id="stat-fraud">0</p>
-                        </div>
+                    <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900">Dashboard</h2></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-brand-500"><p class="text-sm font-bold text-slate-500">Total Revenue</p><p class="text-3xl font-black" id="stat-revenue">$0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-amber-500"><p class="text-sm font-bold text-slate-500">Pending Orders</p><p class="text-3xl font-black text-amber-600" id="stat-pending">0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-emerald-500"><p class="text-sm font-bold text-slate-500">Total Catalog Items</p><p class="text-3xl font-black text-emerald-600" id="stat-items">0</p></div>
                     </div>
                 </div>
 
-                <!-- 2. REPORTS (NEW) -->
-                <div id="view-reports" class="hidden animate-fade-in">
-                    <div class="mb-8">
-                        <h2 class="text-3xl font-extrabold text-slate-900">Sales Reports & Analytics</h2>
-                        <p class="text-slate-500 mt-1 font-medium">Performance metrics and best-selling items.</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="glass-card rounded-3xl p-6 shadow-sm">
-                            <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">Recent Revenue Trend</h3>
-                            <div id="revenue-chart" class="h-48 flex items-end justify-between gap-2 text-xs font-mono text-slate-400">
-                                <!-- Chart Bars injected by JS -->
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-3xl p-6 shadow-sm">
-                            <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">Top Selling Items</h3>
-                            <ul id="top-sellers-list" class="space-y-3 divide-y divide-slate-100">
-                                <!-- Top sellers injected by JS -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. TRANSACTIONS & FRAUD AI -->
+                <!-- ORDERS -->
                 <div id="view-transactions" class="hidden animate-fade-in">
-                    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-                        <div>
-                            <h2 class="text-3xl font-extrabold text-slate-900">Orders & Fraud Detection</h2>
-                            <p class="text-slate-500 mt-1 font-medium">Process orders. High-risk orders are flagged automatically by AI rules.</p>
-                        </div>
-                        <button id="bulk-send-btn" onclick="bulkSendToCourier()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2 transition-all">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg> Bulk Send
-                        </button>
-                    </div>
-
-                    <div class="glass-card rounded-3xl shadow-sm overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead class="bg-slate-50/80">
-                                    <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider font-bold">
-                                        <th class="p-5 w-12 text-center"><input type="checkbox" id="select-all-orders" onchange="toggleAllOrders(this)" class="w-4 h-4 cursor-pointer"></th>
-                                        <th class="p-5">Order ID</th>
-                                        <th class="p-5">Customer & Fraud Score</th>
-                                        <th class="p-5">Items & Stock Status</th>
-                                        <th class="p-5">Status</th>
-                                        <th class="p-5 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tx-list" class="divide-y divide-slate-100 text-sm"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. CATALOG (B2B & DROPSHIPPING) -->
-                <div id="view-catalog" class="hidden animate-fade-in">
-                    <div class="mb-8 flex justify-between items-end gap-4">
-                        <div>
-                            <h2 class="text-3xl font-extrabold text-slate-900">Catalog & Sourcing</h2>
-                            <p class="text-slate-500 mt-1 font-medium">Manage B2B pricing, stock levels, and dropshipping suppliers.</p>
-                        </div>
-                        <button onclick="openCatalogModal()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">Add New Item</button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="catalog-grid"></div>
-                </div>
-
-                <!-- 5. CUSTOMERS -->
-                <div id="view-customers" class="hidden animate-fade-in">
-                    <h2 class="text-3xl font-extrabold text-slate-900 mb-8">Customer CRM</h2>
+                    <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900">Live Orders</h2></div>
                     <div class="glass-card rounded-3xl shadow-sm overflow-hidden">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-slate-50/80">
-                                <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider font-bold">
-                                    <th class="p-5">Name</th><th class="p-5">Contact Details</th><th class="p-5">Lifetime Value</th><th class="p-5">Total Orders</th>
+                                <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase font-bold">
+                                    <th class="p-5">Order ID</th><th class="p-5">Customer Info</th><th class="p-5">Order Value</th><th class="p-5">Status</th><th class="p-5 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="customers-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="tx-list" class="divide-y divide-slate-100 text-sm"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- 6. MARKETING -->
-                <div id="view-marketing" class="hidden animate-fade-in">
+                <!-- CATALOG -->
+                <div id="view-catalog" class="hidden animate-fade-in">
                     <div class="mb-8 flex justify-between items-end gap-4">
-                        <h2 class="text-3xl font-extrabold text-slate-900">Discounts & Promos</h2>
-                        <button onclick="openPromoModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">Create Promo</button>
+                        <h2 class="text-3xl font-extrabold text-slate-900">Cloud Catalog</h2>
+                        <button onclick="document.getElementById('modal-catalog').classList.remove('hidden')" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">Add New Item</button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="promos-grid"></div>
-                </div>
-
-                <!-- 7. THEME INTEGRATION -->
-                <div id="view-theme" class="hidden animate-fade-in">
-                    <h2 class="text-3xl font-extrabold text-slate-900 mb-8">Theme Integration</h2>
-                    <div class="glass-card rounded-3xl p-8 shadow-sm max-w-2xl">
-                        <p class="mb-4 text-slate-600">Use this API endpoint in your frontend theme to securely fetch your catalog data.</p>
-                        <input type="text" readonly value="https://api.omnidash.app/v1/store/api_k_demo_9921" class="w-full p-4 bg-slate-100 rounded-xl font-mono text-sm outline-none border border-slate-200 mb-6">
-                        
-                        <h3 class="font-bold text-slate-800 mb-2">How to test your Admin Panel locally:</h3>
-                        <ol class="list-decimal pl-5 space-y-2 text-sm text-slate-600 font-medium bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <li>Save this code as <code>index.html</code>.</li>
-                            <li>Double-click the file to open it in Chrome or Firefox.</li>
-                            <li>Add a product in the Catalog tab. Note how the dashboard statistics update.</li>
-                            <li>To view the database saving in real-time, press <code>F12</code> to open DevTools, go to <b>Application -> Local Storage</b>. You will see <code>omniDashMasterDB</code>.</li>
-                            <li>Open the <b>Console</b> in DevTools and paste the code below to simulate a website theme sending a fake order:</li>
-                        </ol>
-                        <pre class="bg-slate-900 text-green-400 p-4 rounded-xl text-[11px] overflow-x-auto mt-4 font-mono">
-// Paste this in console to simulate a new order
-let db = JSON.parse(localStorage.getItem('omniDashMasterDB'));
-db.transactions.push({
-    id: Date.now(), date: new Date().toISOString().split('T')[0],
-    customer: { name: "Test User", email: "test@none.com", phone: "0000", address: "123 Fake St" },
-    items: [{ catalogId: 1, qty: 1 }], total: 99.99, status: "Pending"
-});
-localStorage.setItem('omniDashMasterDB', JSON.stringify(db));
-window.location.reload();
-                        </pre>
-                    </div>
-                </div>
-
-                <!-- 8. SETTINGS -->
-                <div id="view-settings" class="hidden animate-fade-in">
-                    <h2 class="text-3xl font-extrabold text-slate-900 mb-8">System Settings & Couriers</h2>
-                    <div class="glass-card rounded-3xl p-8 shadow-sm max-w-2xl">
-                        <form id="settings-form" class="space-y-6">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Store Name</label><input type="text" id="set-store-name" class="w-full p-3 bg-white border border-slate-300 rounded-xl"></div>
-                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Currency Symbol</label><input type="text" id="set-currency" class="w-full p-3 bg-white border border-slate-300 rounded-xl"></div>
-                            </div>
-                            
-                            <h3 class="text-lg font-bold text-brand-700 border-b pb-2 mt-6">Logistics & API</h3>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">Default Courier Partner</label>
-                                <select id="set-default-courier" class="w-full p-3 bg-white border border-slate-300 rounded-xl">
-                                    <option value="steadfast">Steadfast Courier</option><option value="pathao">Pathao Courier</option>
-                                </select>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-3 p-4 bg-slate-50 border rounded-2xl">
-                                    <h4 class="font-bold text-slate-900 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-500"></div> Steadfast</h4>
-                                    <input type="text" id="set-steadfast-api" placeholder="API Key" class="w-full p-2.5 bg-white border rounded-lg text-sm">
-                                    <input type="password" id="set-steadfast-secret" placeholder="Secret Key" class="w-full p-2.5 bg-white border rounded-lg text-sm">
-                                </div>
-                                <div class="space-y-3 p-4 bg-slate-50 border rounded-2xl">
-                                    <h4 class="font-bold text-slate-900 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500"></div> Pathao</h4>
-                                    <input type="text" id="set-pathao-client" placeholder="Client ID" class="w-full p-2.5 bg-white border rounded-lg text-sm">
-                                    <input type="password" id="set-pathao-secret" placeholder="Client Secret" class="w-full p-2.5 bg-white border rounded-lg text-sm">
-                                    <input type="text" id="set-pathao-store" placeholder="Store ID" class="w-full p-2.5 bg-white border rounded-lg text-sm">
-                                </div>
-                            </div>
-                            <button type="submit" class="bg-slate-900 hover:bg-black text-white font-bold py-3.5 px-8 rounded-xl w-full">Save All Configurations</button>
-                        </form>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="catalog-grid"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- MODAL: Catalog Item (B2B + Dropshipping Support) -->
+    <!-- CATALOG MODAL -->
     <div id="modal-catalog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 overflow-y-auto max-h-[90vh]">
-            <h3 class="text-xl font-extrabold text-slate-900 mb-4">Add Catalog Item</h3>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 overflow-y-auto">
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4">Add Item to Supabase</h3>
             <form id="catalog-form" class="space-y-4">
-                <input type="hidden" id="cat-id">
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs font-bold text-slate-500 mb-1 block">Item Name</label><input type="text" id="cat-name" required class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></div>
-                    <div><label class="text-xs font-bold text-slate-500 mb-1 block">Type</label><select id="cat-type" class="w-full p-3 bg-slate-50 border rounded-xl"><option value="Product">Physical Product</option><option value="Service">Digital/Service</option></select></div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs font-bold text-slate-500 mb-1 block">Retail Price</label><input type="number" id="cat-price" required step="0.01" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></div>
-                    <div><label class="text-xs font-bold text-blue-500 mb-1 block">B2B Wholesale Price</label><input type="number" id="cat-b2b" step="0.01" placeholder="Optional" class="w-full p-3 bg-blue-50 border border-blue-200 rounded-xl outline-none focus:border-blue-500"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs font-bold text-slate-500 mb-1 block">Stock Quantity</label><input type="number" id="cat-stock" placeholder="Blank = Unlimited" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></div>
-                    <div><label class="text-xs font-bold text-amber-500 mb-1 block">Dropship Supplier Link</label><input type="text" id="cat-supplier" placeholder="URL (Internal use)" class="w-full p-3 bg-amber-50 border border-amber-200 rounded-xl outline-none focus:border-amber-500"></div>
-                </div>
-                <div><label class="text-xs font-bold text-slate-500 mb-1 block">Image URL</label><input type="text" id="cat-image" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></div>
-                <div><label class="text-xs font-bold text-slate-500 mb-1 block">Description</label><textarea id="cat-desc" rows="2" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></textarea></div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Name</label><input type="text" id="cat-name" required class="w-full p-3 bg-slate-50 border rounded-xl"></div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Price</label><input type="number" id="cat-price" required class="w-full p-3 bg-slate-50 border rounded-xl"></div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Image URL</label><input type="text" id="cat-image" class="w-full p-3 bg-slate-50 border rounded-xl"></div>
                 <div class="flex justify-end gap-3 mt-4">
                     <button type="button" onclick="document.getElementById('modal-catalog').classList.add('hidden')" class="px-6 py-3 bg-slate-100 rounded-xl font-bold">Cancel</button>
-                    <button type="submit" class="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold shadow-md">Save Item</button>
+                    <button type="submit" class="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold">Save to Cloud</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: Promo -->
-    <div id="modal-promo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 class="font-extrabold text-xl mb-4">Create Promo</h3>
-            <form id="promo-form" class="space-y-4">
-                <input type="text" id="promo-code" required placeholder="CODE" class="w-full p-3 bg-slate-50 border rounded-xl font-mono uppercase">
-                <div class="flex gap-2">
-                    <input type="number" id="promo-value" required placeholder="Amount" class="w-full p-3 bg-slate-50 border rounded-xl">
-                    <select id="promo-type" class="p-3 bg-slate-50 border rounded-xl"><option value="%">% Off</option><option value="flat">Flat Off</option></select>
-                </div>
-                <div class="flex justify-end gap-3"><button type="button" onclick="document.getElementById('modal-promo').classList.add('hidden')" class="px-4 py-2 bg-slate-100 rounded-xl font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl">Save</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- GLOBAL CUSTOM ALERT MODAL -->
-    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6">
-            <h3 id="modal-title" class="text-xl font-extrabold text-slate-900 mb-2">Notice</h3>
-            <p id="modal-message" class="text-slate-600 mb-6 font-medium text-sm"></p>
-            <div class="flex justify-end gap-3">
-                <button id="modal-cancel" class="px-5 py-2.5 bg-slate-100 rounded-xl font-bold hidden">Cancel</button>
-                <button id="modal-confirm" class="px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- INVOICE TEMPLATE (Hidden) -->
-    <div id="printable-invoice" class="hidden bg-white text-black p-8">
-        <h1 class="text-4xl font-black mb-6" id="inv-store-name">Store</h1>
-        <p id="inv-details" class="mb-6"></p>
-        <table class="w-full text-left mb-6 border-collapse"><tbody id="inv-items"></tbody></table>
-        <h2 class="text-2xl font-black text-right" id="inv-total"></h2>
-    </div>
-
+    <!-- SUPABASE JAVASCRIPT LOGIC -->
     <script>
-        // MASTER DATABASE BOILERPLATE
-        const defaultDB = {
-            settings: { storeName: 'OmniDash Master', currency: '$', defaultCourier: 'steadfast' },
-            catalog: [
-                { id: 1, name: "Consultation Service", type: "Service", price: 150, b2b_price: null, stock: "", supplier: "", image: "", description: "1-on-1 strategy call." },
-                { id: 2, name: "Premium T-Shirt", type: "Product", price: 30, b2b_price: 15, stock: 45, supplier: "AliExpress Store A", image: "https://placehold.co/100x100/e2e8f0/475569?text=Shirt", description: "Cotton shirt." }
-            ],
-            transactions: [
-                // Clean Order
-                { id: 101, date: "2024-05-10", customer: { name: "Alice J", email: "alice@ok.com", phone: "+15550198", address: "123 Main St" }, items: [{ catalogId: 1, qty: 1 }], total: 150, status: "Completed" },
-                // Suspicious Order (AI Fake Detection test case)
-                { id: 102, date: "2024-05-11", customer: { name: "Fake User", email: "", phone: "00000000", address: "asdfghjkl" }, items: [{ catalogId: 2, qty: 50 }], total: 1500, status: "Pending" }
-            ],
-            promos: []
-        };
+        const SUPABASE_URL = 'https://vzznqlxiolikyrzabgbb.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_1zHkc8FfhIZs41L3xuNMNQ_l9L6Ph8G';
+        const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
 
-        let db = JSON.parse(localStorage.getItem('omniDashMasterDB')) || defaultDB;
-        function saveDB() { localStorage.setItem('omniDashMasterDB', JSON.stringify(db)); refreshUI(); }
-        function formatCurrency(amount) { return `${db.settings.currency}${parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2})}`; }
-        function getItem(id) { return db.catalog.find(i => i.id === id) || { name: 'Unknown', price: 0 }; }
+        // Global State
+        let db = { catalog: [], transactions: [] };
 
-        // MOCK AI FRAUD DETECTION LOGIC (Rule-based)
-        function calculateFraudScore(order) {
-            let score = 0;
-            let flags = [];
-            
-            // Check missing/bad email
-            if (!order.customer.email || !order.customer.email.includes('@')) { score += 40; flags.push("Invalid Email"); }
-            // Check bad phone numbers
-            if (order.customer.phone === "00000000" || order.customer.phone.length < 5) { score += 40; flags.push("Suspicious Phone"); }
-            // Check spam addresses
-            if (order.customer.address.length < 10) { score += 20; flags.push("Short Address"); }
-            // Check unusually high quantities/totals
-            if (order.total > 1000) { score += 30; flags.push("Unusually High Value"); }
-
-            if (score >= 70) return { risk: 'HIGH', color: 'red', text: 'Fraud Likely', flags };
-            if (score >= 40) return { risk: 'MEDIUM', color: 'amber', text: 'Review Needed', flags };
-            return { risk: 'LOW', color: 'green', text: 'Safe', flags };
+        // Navigation
+        function switchTab(tabId) {
+            ['dashboard', 'transactions', 'catalog'].forEach(id => {
+                document.getElementById('view-' + id).classList.add('hidden');
+                document.getElementById('nav-' + id).className = 'w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl font-semibold';
+            });
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).className = 'w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold';
         }
 
-        // AUTH
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        // Login Logic
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            btn.innerText = "Syncing with Supabase...";
+            
+            await fetchAllData();
+            
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('app-layout').classList.remove('hidden');
             document.getElementById('app-layout').classList.add('flex');
-            initApp();
-        });
-        function logout() { location.reload(); }
-
-        // MODAL
-        function showModal(title, message, isConfirm = false, onConfirm = null) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-message').textContent = message;
-            const cb = document.getElementById('modal-cancel'), cm = document.getElementById('modal-confirm');
-            const ncb = cb.cloneNode(true), ncm = cm.cloneNode(true);
-            cb.replaceWith(ncb); cm.replaceWith(ncm);
-            document.getElementById('custom-modal').classList.remove('hidden');
-
-            ncb.onclick = () => document.getElementById('custom-modal').classList.add('hidden');
-            if (isConfirm) {
-                ncb.classList.remove('hidden');
-                ncm.onclick = () => { document.getElementById('custom-modal').classList.add('hidden'); if(onConfirm) onConfirm(); };
-            } else {
-                ncb.classList.add('hidden');
-                ncm.onclick = () => document.getElementById('custom-modal').classList.add('hidden');
-            }
-        }
-
-        // NAVIGATION
-        const tabs = ['dashboard', 'transactions', 'catalog', 'customers', 'reports', 'marketing', 'theme', 'settings'];
-        function switchTab(tabId) {
-            tabs.forEach(id => {
-                document.getElementById('view-' + id).classList.add('hidden');
-                document.getElementById('nav-' + id).className = 'w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold transition group';
-            });
-            document.getElementById('view-' + tabId).classList.remove('hidden');
-            document.getElementById('nav-' + tabId).className = 'w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition';
-        }
-
-        function initApp() {
-            document.getElementById('store-greeting').textContent = db.settings.storeName;
-            document.getElementById('set-store-name').value = db.settings.storeName;
-            document.getElementById('set-currency').value = db.settings.currency;
-            document.getElementById('set-default-courier').value = db.settings.defaultCourier;
             switchTab('dashboard');
-            refreshUI();
-        }
+        });
 
-        function refreshUI() { renderDashboard(); renderTransactions(); renderCatalog(); renderCustomers(); renderReports(); renderPromos(); }
-
-        // DASHBOARD
-        function renderDashboard() {
-            let rev = 0, pend = 0, fraudCount = 0;
-            db.transactions.forEach(t => { 
-                if(t.status === 'Completed' || t.status === 'Shipped') rev += t.total; 
-                if(t.status === 'Pending') pend++; 
-                if(calculateFraudScore(t).risk === 'HIGH') fraudCount++;
-            });
-            document.getElementById('stat-revenue').textContent = formatCurrency(rev);
-            document.getElementById('stat-pending').textContent = pend;
-            document.getElementById('stat-customers').textContent = new Set(db.transactions.map(t => t.customer.email)).size;
-            document.getElementById('stat-fraud').textContent = fraudCount;
-        }
-
-        // REPORTS
-        function renderReports() {
-            // Mock Revenue Chart
-            const chart = document.getElementById('revenue-chart');
-            chart.innerHTML = [40, 70, 45, 90, 65, 100, 85].map(h => 
-                `<div class="w-full bg-brand-100 rounded-t-lg relative group flex items-end"><div class="w-full bg-brand-500 rounded-t-lg transition-all hover:bg-brand-600" style="height: ${h}%"></div></div>`
-            ).join('');
-            
-            // Top Sellers Logic
-            const salesCount = {};
-            db.transactions.forEach(t => t.items.forEach(i => salesCount[i.catalogId] = (salesCount[i.catalogId] || 0) + i.qty));
-            const topList = Object.entries(salesCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-            
-            document.getElementById('top-sellers-list').innerHTML = topList.map(entry => {
-                const item = getItem(parseInt(entry[0]));
-                return `<li class="flex justify-between items-center py-2"><span class="font-bold text-slate-700">${item.name}</span><span class="bg-brand-50 text-brand-700 font-bold px-3 py-1 rounded-lg text-xs">${entry[1]} Sold</span></li>`;
-            }).join('') || '<li class="text-slate-500 text-sm">No sales data yet.</li>';
-        }
-
-        // TRANSACTIONS & FRAUD
-        function renderTransactions() {
-            const tbody = document.getElementById('tx-list'); tbody.innerHTML = '';
-            if(db.transactions.length === 0) return tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders.</td></tr>';
-            
-            db.transactions.sort((a,b) => b.id - a.id).forEach(t => {
-                const fraud = calculateFraudScore(t);
-                const fraudBadge = `<div class="mt-2 text-[10px] font-bold px-2 py-1 rounded inline-block bg-${fraud.color}-100 text-${fraud.color}-700" title="Flags: ${fraud.flags.join(', ')}">AI Risk: ${fraud.text}</div>`;
+        // Data Fetching
+        async function fetchAllData() {
+            try {
+                const catRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*`, { headers });
+                db.catalog = await catRes.json();
                 
-                // Proper Stock status check
-                let stockWarnings = [];
-                t.items.forEach(i => {
-                    const dbItem = getItem(i.catalogId);
-                    if(dbItem.stock !== "" && dbItem.stock < i.qty) stockWarnings.push(`Not enough ${dbItem.name} in stock!`);
-                });
-                const stockAlert = stockWarnings.length ? `<p class="text-xs text-red-500 font-bold mt-1">⚠️ Out of Stock</p>` : '';
+                const txRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*`, { headers });
+                db.transactions = await txRes.json();
+                
+                refreshUI();
+            } catch (e) { alert("Failed to connect to Supabase database"); }
+        }
 
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 border-b border-slate-50">
-                        <td class="p-5 text-center"><input type="checkbox" value="${t.id}" class="w-4 h-4 order-checkbox"></td>
+        function refreshUI() {
+            // Dashboard
+            let rev = 0, pend = 0;
+            db.transactions.forEach(t => { 
+                if(t.status === 'Completed') rev += t.total; 
+                if(t.status === 'Pending') pend++; 
+            });
+            document.getElementById('stat-revenue').textContent = "$" + rev.toLocaleString();
+            document.getElementById('stat-pending').textContent = pend;
+            document.getElementById('stat-items').textContent = db.catalog.length;
+
+            // Catalog
+            const cGrid = document.getElementById('catalog-grid'); cGrid.innerHTML = '';
+            db.catalog.forEach(c => {
+                cGrid.innerHTML += `
+                    <div class="glass-card rounded-3xl p-6 relative">
+                        <button onclick='deleteCatalog(${c.id})' class="absolute top-4 right-4 text-red-500 font-bold">✕</button>
+                        <h3 class="text-xl font-bold mt-2">${c.name}</h3>
+                        <p class="text-xl font-black text-brand-600">$${c.price}</p>
+                    </div>`;
+            });
+
+            // Transactions
+            const tList = document.getElementById('tx-list'); tList.innerHTML = '';
+            db.transactions.sort((a,b)=>b.id-a.id).forEach(t => {
+                tList.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b">
                         <td class="p-5 font-medium text-slate-500">#${t.id}</td>
-                        <td class="p-5"><b>${t.customer.name}</b><br><span class="text-xs">${t.customer.email||'No Email'} | ${t.customer.phone}</span><br>${fraudBadge}</td>
-                        <td class="p-5 text-sm">${t.items.map(i => `${getItem(i.catalogId).name} (x${i.qty})`).join('<br>')}<br><b class="text-brand-700 mt-1 block">${formatCurrency(t.total)}</b>${stockAlert}</td>
-                        <td class="p-5"><select onchange="updateTx(${t.id}, this.value)" class="text-xs font-bold px-3 py-1.5 rounded-lg border outline-none bg-white"><option value="Pending" ${t.status==='Pending'?'selected':''}>Pending</option><option value="Completed" ${t.status==='Completed'?'selected':''}>Completed</option><option value="Shipped" ${t.status==='Shipped'?'selected':''}>Shipped</option></select></td>
-                        <td class="p-5 text-right"><button onclick="deleteOrder(${t.id})" class="text-xs text-red-500 font-bold underline">Delete</button></td>
+                        <td class="p-5"><b>${t.customer.name}</b><br><span class="text-xs text-slate-500">${t.customer.email}</span></td>
+                        <td class="p-5 font-bold text-brand-600">$${t.total}</td>
+                        <td class="p-5"><select onchange="updateOrderStatus(${t.id}, this.value)" class="px-2 py-1 border rounded bg-white text-xs font-bold"><option ${t.status==='Pending'?'selected':''}>Pending</option><option ${t.status==='Completed'?'selected':''}>Completed</option></select></td>
+                        <td class="p-5 text-right"><button onclick="deleteOrder(${t.id})" class="text-xs text-red-500 font-bold">Delete</button></td>
                     </tr>`;
             });
         }
-        function updateTx(id, status) { 
-            const order = db.transactions.find(t => t.id === id);
-            // Stock deduction logic on completion
-            if(status === 'Completed' && order.status !== 'Completed') {
-                order.items.forEach(i => {
-                    const dbItem = getItem(i.catalogId);
-                    if(dbItem.stock !== "") dbItem.stock = Math.max(0, parseInt(dbItem.stock) - i.qty);
-                });
+
+        // Database Mutations
+        document.getElementById('catalog-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                name: document.getElementById('cat-name').value,
+                price: parseFloat(document.getElementById('cat-price').value),
+                image: document.getElementById('cat-image').value,
+                type: 'Product', stock: null
+            };
+            
+            await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(newItem) });
+            document.getElementById('modal-catalog').classList.add('hidden');
+            fetchAllData(); // Refresh table
+        });
+
+        async function deleteCatalog(id) {
+            if(confirm("Delete this product?")) {
+                await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}`, { method: 'DELETE', headers });
+                fetchAllData();
             }
-            order.status = status; saveDB(); 
-        }
-        function deleteOrder(id) { showModal("Delete", `Delete order #${id}?`, true, () => { db.transactions = db.transactions.filter(t => t.id !== id); saveDB(); }); }
-
-        // CATALOG (B2B + Dropshipping)
-        function renderCatalog() {
-            const grid = document.getElementById('catalog-grid'); grid.innerHTML = '';
-            db.catalog.forEach(item => {
-                const b2bBadge = item.b2b_price ? `<span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded ml-2">B2B: ${formatCurrency(item.b2b_price)}</span>` : '';
-                const supplierBadge = item.supplier ? `<p class="text-[10px] font-bold text-amber-600 mt-2 bg-amber-50 p-1 rounded inline-block">Supplier: ${item.supplier}</p>` : '';
-                const stockText = item.stock !== "" ? `${item.stock} left` : "Unlimited";
-                
-                grid.innerHTML += `
-                    <div class="glass-card rounded-3xl p-6 relative">
-                        <button onclick='deleteCat(${item.id})' class="absolute top-4 right-4 text-slate-300 hover:text-red-500">✕</button>
-                        <div class="flex justify-between items-start mb-2"><span class="text-[10px] font-black uppercase bg-slate-800 text-white px-2 py-1 rounded-lg">${item.type}</span><span class="text-xs font-bold text-slate-500">Stock: ${stockText}</span></div>
-                        <h3 class="text-xl font-bold mt-2">${item.name}</h3>
-                        <div class="flex items-center mt-1"><span class="text-xl font-black text-brand-600">${formatCurrency(item.price)}</span>${b2bBadge}</div>
-                        ${supplierBadge}
-                    </div>`;
-            });
-        }
-        function openCatalogModal() { document.getElementById('catalog-form').reset(); document.getElementById('modal-catalog').classList.remove('hidden'); }
-        document.getElementById('catalog-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            db.catalog.push({
-                id: Date.now(), name: document.getElementById('cat-name').value, type: document.getElementById('cat-type').value,
-                price: parseFloat(document.getElementById('cat-price').value), b2b_price: parseFloat(document.getElementById('cat-b2b').value) || null,
-                stock: document.getElementById('cat-stock').value, supplier: document.getElementById('cat-supplier').value,
-                image: document.getElementById('cat-image').value, description: document.getElementById('cat-desc').value
-            });
-            saveDB(); document.getElementById('modal-catalog').classList.add('hidden');
-        });
-        function deleteCat(id) { showModal("Delete", "Remove item?", true, () => { db.catalog = db.catalog.filter(i => i.id !== id); saveDB(); }); }
-
-        // CUSTOMERS CRM
-        function renderCustomers() {
-            const map = {};
-            db.transactions.forEach(t => {
-                if (!map[t.customer.email]) map[t.customer.email] = { name: t.customer.name, details: t.customer.phone, total: 0, orders: 0 };
-                if (t.status === 'Completed') map[t.customer.email].total += t.total;
-                map[t.customer.email].orders++;
-            });
-            document.getElementById('customers-list').innerHTML = Object.values(map).sort((a,b)=>b.total-a.total).map(c => `<tr><td class="p-5 font-bold">${c.name}</td><td class="p-5 text-sm">${c.details}</td><td class="p-5 font-black text-brand-600">${formatCurrency(c.total)}</td><td class="p-5">${c.orders}</td></tr>`).join('');
         }
 
-        // PROMOS
-        function renderPromos() { document.getElementById('promos-grid').innerHTML = db.promos.map(p => `<div class="glass-card p-6 border-l-4 border-purple-500 relative"><button onclick="db.promos=db.promos.filter(x=>x.code!=='${p.code}');saveDB();" class="absolute top-4 right-4 text-slate-300">✕</button><h3 class="text-2xl font-black font-mono">${p.code}</h3><p class="font-bold text-purple-700">${p.type === '%' ? p.value + '% OFF' : formatCurrency(p.value) + ' OFF'}</p></div>`).join(''); }
-        function openPromoModal() { document.getElementById('modal-promo').classList.remove('hidden'); }
-        document.getElementById('promo-form').addEventListener('submit', (e) => { e.preventDefault(); db.promos.push({ code: document.getElementById('promo-code').value.toUpperCase(), value: parseFloat(document.getElementById('promo-value').value), type: document.getElementById('promo-type').value }); saveDB(); document.getElementById('modal-promo').classList.add('hidden'); });
+        async function updateOrderStatus(id, newStatus) {
+            await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'PATCH', headers, body: JSON.stringify({ status: newStatus }) });
+            fetchAllData();
+        }
 
-        // SETTINGS
-        document.getElementById('settings-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            db.settings.storeName = document.getElementById('set-store-name').value;
-            db.settings.currency = document.getElementById('set-currency').value;
-            db.settings.defaultCourier = document.getElementById('set-default-courier').value;
-            saveDB(); showModal('Success', 'Settings Saved!');
-        });
+        async function deleteOrder(id) {
+            if(confirm("Delete this order?")) {
+                await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'DELETE', headers });
+                fetchAllData();
+            }
+        }
     </script>
 </body>
 </html>
