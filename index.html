@@ -88,7 +88,7 @@
                                 <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase font-bold">
                                     <th class="p-5">Order ID</th>
                                     <th class="p-5">Client Contact</th>
-                                    <th class="p-5">Hosting / Domain Setup</th>
+                                    <th class="p-5">Product Details</th>
                                     <th class="p-5">Total Paid</th>
                                     <th class="p-5">Status</th>
                                     <th class="p-5 text-right">Delete</th>
@@ -104,7 +104,7 @@
                     <div class="mb-8 flex justify-between items-end gap-4">
                         <div>
                             <h2 class="text-3xl font-extrabold text-slate-900">Catalog Manager</h2>
-                            <p class="text-slate-500 mt-1">Add, edit, and reorder products on your storefront.</p>
+                            <p class="text-slate-500 mt-1">Add, edit, and manage products on your storefront.</p>
                         </div>
                         <button onclick="openCatalogModal()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
                             <i class="ph-bold ph-plus"></i> Add Product
@@ -118,7 +118,7 @@
 
     <!-- CATALOG MODAL -->
     <div id="modal-catalog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 overflow-y-auto">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 overflow-y-auto max-h-[90vh]">
             <h3 id="modal-catalog-title" class="text-xl font-extrabold text-slate-900 mb-4">Add Template to Store</h3>
             <form id="catalog-form" class="space-y-4">
                 <input type="hidden" id="cat-id"> <!-- Hidden ID for Editing -->
@@ -140,18 +140,34 @@
                 </div>
                 
                 <div>
-                    <label class="text-xs font-bold text-brand-600 block mb-1">Live Demo URL</label>
+                    <label class="text-xs font-bold text-brand-600 block mb-1">Live Demo URL (Optional)</label>
                     <input type="text" id="cat-demo" placeholder="https://coffe-demo.netlify.app" class="w-full p-3 bg-brand-50 border border-brand-100 rounded-xl outline-none focus:border-brand-500">
-                    <p class="text-[10px] text-slate-400 mt-1">This populates the "View Live" button.</p>
                 </div>
                 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 block mb-1">Cover Image URL</label>
-                    <input type="text" id="cat-image" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Main Cover Image URL</label>
+                    <input type="text" id="cat-image" placeholder="Primary Thumbnail Image" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                </div>
+                
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl space-y-4">
+                    <div class="flex items-center gap-2 mb-2 text-indigo-700">
+                        <i class="ph-bold ph-images text-lg"></i>
+                        <span class="font-bold text-sm">Product Page Upgrades</span>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Additional Images (Comma separated URLs for slider)</label>
+                        <textarea id="cat-gallery" rows="2" placeholder="https://img1.jpg, https://img2.jpg" class="w-full p-3 bg-white border border-indigo-100 rounded-xl outline-none focus:border-indigo-400"></textarea>
+                        <p class="text-[10px] text-slate-400 mt-1">Used for the image carousel on the dedicated product page.</p>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Full Detailed Description (For Product Page)</label>
+                        <textarea id="cat-full-desc" rows="4" placeholder="Write paragraphs of details, features, FAQs..." class="w-full p-3 bg-white border border-indigo-100 rounded-xl outline-none focus:border-indigo-400"></textarea>
+                    </div>
                 </div>
                 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 block mb-1">Description</label>
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Short Description (For Front Page Card)</label>
                     <textarea id="cat-desc" rows="2" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></textarea>
                 </div>
                 
@@ -202,34 +218,13 @@
                 // Fetch Catalog ordered by sort_order
                 const catRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.asc`, { headers });
                 db.catalog = await catRes.json();
-                
-                // --- AUTO SEED LEAF & LATTE IF EMPTY ---
-                if (db.catalog.length === 0) {
-                    const defaultSeed = {
-                        id: Date.now(),
-                        name: "Leaf & Latte Coffee Shop",
-                        price: 49.00,
-                        image: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                        description: "A premium, modern artisanal coffee shop template. Perfect for cafes and roasters.",
-                        supplier: "https://masteradminpanelforclients.netlify.app/",
-                        type: "Website",
-                        category: "Permanent Websites",
-                        sort_order: 1
-                    };
-                    await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(defaultSeed) });
-                    const retryRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.asc`, { headers });
-                    db.catalog = await retryRes.json();
-                }
-
-                // Ensure sort_order exists on all items to prevent breaking
-                db.catalog.forEach((c, index) => { if(c.sort_order == null) c.sort_order = index; });
 
                 const txRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*`, { headers });
                 db.transactions = await txRes.json();
                 
                 refreshUI();
             } catch (e) { 
-                alert("Failed to connect to Supabase database. Please check keys."); 
+                alert("Failed to connect to Supabase database. Please check keys or ensure SQL tables are created."); 
                 console.error(e);
             }
         }
@@ -238,7 +233,7 @@
             // Dashboard Stats
             let rev = 0, pend = 0;
             db.transactions.forEach(t => { 
-                if(t.status === 'Deployed / Completed') rev += parseFloat(t.total || 0); 
+                if(t.status === 'Deployed / Completed' || t.status === 'completed') rev += parseFloat(t.total || t.amount || 0); 
                 if(t.status === 'Pending Setup' || t.status === 'Pending') pend++; 
             });
             document.getElementById('stat-revenue').textContent = "$" + rev.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -249,7 +244,7 @@
             const cGrid = document.getElementById('catalog-grid'); cGrid.innerHTML = '';
             db.catalog.forEach((c, index) => {
                 cGrid.innerHTML += `
-                    <div class="glass-card rounded-3xl p-6 relative flex flex-col h-full border border-slate-200 hover:border-brand-300 transition">
+                    <div class="glass-card rounded-3xl p-6 relative flex flex-col h-full border border-slate-200 hover:border-brand-300 transition shadow-sm">
                         
                         <!-- Top Actions (Delete & Edit) -->
                         <div class="absolute top-4 right-4 flex gap-2">
@@ -279,7 +274,7 @@
                         <p class="text-2xl font-black text-slate-900 mt-1 mb-4">$${c.price}</p>
                         
                         <div class="h-32 w-full rounded-xl overflow-hidden bg-slate-100 mb-4">
-                            <img src="${c.image || 'https://via.placeholder.com/400'}" class="w-full h-full object-cover">
+                            <img src="${c.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'}" class="w-full h-full object-cover">
                         </div>
 
                         <p class="text-xs font-mono text-slate-500 bg-slate-50 border border-slate-100 p-2 rounded-lg truncate mt-auto">
@@ -293,31 +288,29 @@
             if(db.transactions.length === 0) tList.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders yet.</td></tr>';
             
             db.transactions.sort((a,b)=>b.id-a.id).forEach(t => {
-                const cust = t.customer || {};
-                const domainBadge = cust.domainType === 'custom' 
-                    ? `<span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold">Custom Domain</span>`
-                    : `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold">Free Subdomain</span>`;
+                // Handling both new Supabase structure and old JSON structure
+                const customerName = t.customer_name || (t.customer ? t.customer.name : 'Unknown');
+                const customerEmail = t.customer_email || (t.customer ? t.customer.email : 'No Email');
+                const productName = t.product_name || (t.items && t.items[0] ? 'Item ID: ' + t.items[0].catalogId : 'Unknown Product');
+                const total = parseFloat(t.amount || t.total || 0).toFixed(2);
 
                 tList.innerHTML += `
                     <tr class="hover:bg-slate-50 border-b transition">
-                        <td class="p-5 font-medium text-slate-500 text-xs">#${t.id}</td>
+                        <td class="p-5 font-medium text-slate-500 text-xs">#${t.id || 'N/A'}</td>
                         <td class="p-5">
-                            <b>${cust.name || 'Unknown'}</b><br>
-                            <span class="text-xs text-slate-500">${cust.email || 'No Email'}</span>
+                            <b>${customerName}</b><br>
+                            <span class="text-xs text-slate-500">${customerEmail}</span>
                         </td>
                         <td class="p-5">
                             <div class="bg-white border border-slate-200 p-2 rounded-lg text-xs shadow-sm">
-                                <b class="text-slate-800">Biz Name:</b> ${cust.businessName || 'Not Provided'}<br>
-                                <div class="mt-1 flex items-center gap-2">
-                                    ${domainBadge} <span class="font-mono text-slate-600 truncate max-w-[150px] inline-block">${cust.domainName || 'N/A'}</span>
-                                </div>
+                                <b class="text-slate-800">${productName}</b>
                             </div>
                         </td>
-                        <td class="p-5 font-black text-slate-900">$${parseFloat(t.total || 0).toFixed(2)}</td>
+                        <td class="p-5 font-black text-slate-900">$${total}</td>
                         <td class="p-5">
-                            <select onchange="updateOrderStatus(${t.id}, this.value)" class="px-3 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-brand-500">
-                                <option ${t.status==='Pending Setup' || t.status==='Pending'?'selected':''}>Pending Setup</option>
-                                <option ${t.status==='Deployed / Completed'?'selected':''}>Deployed / Completed</option>
+                            <select onchange="updateOrderStatus(${t.id || t.transactionId}, this.value)" class="px-3 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-brand-500">
+                                <option value="Pending" ${t.status==='Pending Setup' || t.status==='Pending'?'selected':''}>Pending</option>
+                                <option value="completed" ${(t.status==='Deployed / Completed' || t.status==='completed')?'selected':''}>Completed</option>
                             </select>
                         </td>
                         <td class="p-5 text-right">
@@ -347,6 +340,10 @@
             document.getElementById('cat-image').value = item.image || '';
             document.getElementById('cat-desc').value = item.description || '';
             
+            // New Fields for Product Page
+            document.getElementById('cat-gallery').value = (item.image_gallery || []).join(', ');
+            document.getElementById('cat-full-desc').value = item.full_description || '';
+            
             document.getElementById('modal-catalog-title').innerText = "Edit Product";
             document.getElementById('modal-catalog').classList.remove('hidden');
         }
@@ -363,6 +360,11 @@
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Saving...';
 
             const catId = document.getElementById('cat-id').value;
+            
+            // Parse comma separated URLs into an array
+            const galleryInput = document.getElementById('cat-gallery').value;
+            const image_gallery = galleryInput ? galleryInput.split(',').map(url => url.trim()).filter(url => url !== '') : [];
+
             const itemData = {
                 name: document.getElementById('cat-name').value,
                 price: parseFloat(document.getElementById('cat-price').value),
@@ -370,6 +372,8 @@
                 image: document.getElementById('cat-image').value,
                 description: document.getElementById('cat-desc').value,
                 supplier: document.getElementById('cat-demo').value, 
+                image_gallery: image_gallery,
+                full_description: document.getElementById('cat-full-desc').value,
                 type: 'Website', 
                 stock: null 
             };
@@ -400,7 +404,6 @@
                 current.sort_order = previous.sort_order;
                 previous.sort_order = tempOrder;
 
-                // Fire and forget PATCH requests, then refresh
                 await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${current.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: current.sort_order }) }),
                     fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${previous.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: previous.sort_order }) })
@@ -437,6 +440,7 @@
         }
 
         async function deleteOrder(id) {
+            if(!id) return;
             if(confirm("Delete this order record permanently?")) {
                 await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'DELETE', headers });
                 fetchAllData();
