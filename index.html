@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniDash Pro - Cloud Database</title>
+    <title>OmniDash Pro - Cloud HQ</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,16 +30,14 @@
         <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md relative z-10 border border-slate-100">
             <div class="flex justify-center mb-6">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg text-white">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 </div>
             </div>
-            <h1 class="text-3xl font-extrabold text-center text-slate-900">OmniDash Pro</h1>
-            <p class="text-center text-slate-500 mt-2 mb-8 text-sm">Supabase Cloud Edition</p>
+            <h1 class="text-3xl font-extrabold text-center text-slate-900">Softode Admin</h1>
+            <p class="text-center text-slate-500 mt-2 mb-8 text-sm font-medium">Cloud Database Connected</p>
             
             <form id="login-form" class="space-y-5">
-                <div><input type="email" required placeholder="admin@business.com" class="w-full p-3.5 bg-slate-50 border rounded-xl outline-none font-medium"></div>
-                <div><input type="password" required placeholder="••••••••" class="w-full p-3.5 bg-slate-50 border rounded-xl outline-none font-medium"></div>
-                <button type="submit" id="login-btn" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl transition">Connect to Cloud Database</button>
+                <button type="submit" id="login-btn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg">Connect to Supabase DB</button>
             </form>
         </div>
     </div>
@@ -49,18 +47,16 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col md:relative md:flex-shrink-0 shadow-2xl md:shadow-none">
             <div class="p-6 flex items-center gap-3 border-b border-slate-100">
-                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                </div>
-                <div><h2 class="text-slate-900 font-extrabold text-lg">OmniDash</h2><p class="text-[10px] font-black text-brand-600 uppercase">Cloud Linked</p></div>
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md font-bold text-xl">S</div>
+                <div><h2 class="text-slate-900 font-extrabold text-lg leading-tight">Softode</h2><p class="text-[10px] font-black text-brand-600 uppercase tracking-widest">Admin Panel</p></div>
             </div>
             
             <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</button>
-                <button onclick="switchTab('transactions')" id="nav-transactions" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</button>
-                <button onclick="switchTab('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg> Catalog</button>
+                <button onclick="switchTab('transactions')" id="nav-transactions" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Live Orders & Setup</button>
+                <button onclick="switchTab('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg> Template Catalog</button>
             </nav>
-            <div class="p-4 border-t"><button onclick="location.reload()" class="w-full py-2.5 text-sm text-red-600 font-bold">Sign Out</button></div>
+            <div class="p-4 border-t border-slate-100"><button onclick="location.reload()" class="w-full py-2.5 text-sm text-red-600 font-bold hover:bg-red-50 rounded-lg">Disconnect</button></div>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -71,20 +67,28 @@
                 <div id="view-dashboard" class="block animate-fade-in">
                     <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900">Dashboard</h2></div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-brand-500"><p class="text-sm font-bold text-slate-500">Total Revenue</p><p class="text-3xl font-black" id="stat-revenue">$0</p></div>
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-amber-500"><p class="text-sm font-bold text-slate-500">Pending Orders</p><p class="text-3xl font-black text-amber-600" id="stat-pending">0</p></div>
-                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-emerald-500"><p class="text-sm font-bold text-slate-500">Total Catalog Items</p><p class="text-3xl font-black text-emerald-600" id="stat-items">0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-brand-500"><p class="text-sm font-bold text-slate-500 uppercase">Total Revenue</p><p class="text-3xl font-black text-slate-900" id="stat-revenue">$0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-amber-500"><p class="text-sm font-bold text-slate-500 uppercase">Sites Pending Setup</p><p class="text-3xl font-black text-amber-600" id="stat-pending">0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-emerald-500"><p class="text-sm font-bold text-slate-500 uppercase">Active Templates</p><p class="text-3xl font-black text-emerald-600" id="stat-items">0</p></div>
                     </div>
                 </div>
 
-                <!-- ORDERS -->
+                <!-- ORDERS & DEPLOYMENTS -->
                 <div id="view-transactions" class="hidden animate-fade-in">
-                    <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900">Live Orders</h2></div>
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Live Orders & Client Setup</h2>
+                        <p class="text-slate-500 mt-1">Manage new purchases and view client domain requests for Netlify deployment.</p>
+                    </div>
                     <div class="glass-card rounded-3xl shadow-sm overflow-hidden">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-slate-50/80">
                                 <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase font-bold">
-                                    <th class="p-5">Order ID</th><th class="p-5">Customer Info</th><th class="p-5">Order Value</th><th class="p-5">Status</th><th class="p-5 text-right">Actions</th>
+                                    <th class="p-5">Order ID</th>
+                                    <th class="p-5">Client Contact</th>
+                                    <th class="p-5">Hosting / Domain Setup</th>
+                                    <th class="p-5">Total Paid</th>
+                                    <th class="p-5">Status</th>
+                                    <th class="p-5 text-right">Delete</th>
                                 </tr>
                             </thead>
                             <tbody id="tx-list" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -95,8 +99,11 @@
                 <!-- CATALOG -->
                 <div id="view-catalog" class="hidden animate-fade-in">
                     <div class="mb-8 flex justify-between items-end gap-4">
-                        <h2 class="text-3xl font-extrabold text-slate-900">Cloud Catalog</h2>
-                        <button onclick="document.getElementById('modal-catalog').classList.remove('hidden')" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">Add New Item</button>
+                        <div>
+                            <h2 class="text-3xl font-extrabold text-slate-900">Template Catalog</h2>
+                            <p class="text-slate-500 mt-1">Add or edit the website templates shown on your Softode storefront.</p>
+                        </div>
+                        <button onclick="document.getElementById('modal-catalog').classList.remove('hidden')" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">+ Add Template</button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="catalog-grid"></div>
                 </div>
@@ -107,14 +114,23 @@
     <!-- CATALOG MODAL -->
     <div id="modal-catalog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 overflow-y-auto">
-            <h3 class="text-xl font-extrabold text-slate-900 mb-4">Add Item to Supabase</h3>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4">Add Template to Store</h3>
             <form id="catalog-form" class="space-y-4">
-                <div><label class="text-xs font-bold text-slate-500 block mb-1">Name</label><input type="text" id="cat-name" required class="w-full p-3 bg-slate-50 border rounded-xl"></div>
-                <div><label class="text-xs font-bold text-slate-500 block mb-1">Price</label><input type="number" id="cat-price" required class="w-full p-3 bg-slate-50 border rounded-xl"></div>
-                <div><label class="text-xs font-bold text-slate-500 block mb-1">Image URL</label><input type="text" id="cat-image" class="w-full p-3 bg-slate-50 border rounded-xl"></div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Template Name</label><input type="text" id="cat-name" required placeholder="e.g., Leaf & Latte Coffee" class="w-full p-3 bg-slate-50 border rounded-xl outline-none"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-xs font-bold text-slate-500 block mb-1">Price ($)</label><input type="number" id="cat-price" required class="w-full p-3 bg-slate-50 border rounded-xl outline-none"></div>
+                    <div><label class="text-xs font-bold text-slate-500 block mb-1">Type</label><input type="text" value="Website" readonly class="w-full p-3 bg-slate-100 border text-slate-500 rounded-xl outline-none"></div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-brand-600 block mb-1">Live Demo URL</label>
+                    <input type="text" id="cat-demo" placeholder="https://coffe-demo.netlify.app" class="w-full p-3 bg-brand-50 border border-brand-100 rounded-xl outline-none">
+                    <p class="text-[10px] text-slate-400 mt-1">This populates the "View Live" button on the storefront.</p>
+                </div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Cover Image URL</label><input type="text" id="cat-image" class="w-full p-3 bg-slate-50 border rounded-xl outline-none"></div>
+                <div><label class="text-xs font-bold text-slate-500 block mb-1">Description</label><textarea id="cat-desc" rows="2" class="w-full p-3 bg-slate-50 border rounded-xl outline-none"></textarea></div>
                 <div class="flex justify-end gap-3 mt-4">
                     <button type="button" onclick="document.getElementById('modal-catalog').classList.add('hidden')" class="px-6 py-3 bg-slate-100 rounded-xl font-bold">Cancel</button>
-                    <button type="submit" class="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold">Save to Cloud</button>
+                    <button type="submit" class="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold">Publish to Store</button>
                 </div>
             </form>
         </div>
@@ -126,24 +142,23 @@
         const SUPABASE_KEY = 'sb_publishable_1zHkc8FfhIZs41L3xuNMNQ_l9L6Ph8G';
         const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
 
-        // Global State
         let db = { catalog: [], transactions: [] };
 
         // Navigation
         function switchTab(tabId) {
             ['dashboard', 'transactions', 'catalog'].forEach(id => {
                 document.getElementById('view-' + id).classList.add('hidden');
-                document.getElementById('nav-' + id).className = 'w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl font-semibold';
+                document.getElementById('nav-' + id).className = 'w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl font-semibold transition';
             });
             document.getElementById('view-' + tabId).classList.remove('hidden');
-            document.getElementById('nav-' + tabId).className = 'w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold';
+            document.getElementById('nav-' + tabId).className = 'w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition';
         }
 
-        // Login Logic
+        // Login / Connect
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('login-btn');
-            btn.innerText = "Syncing with Supabase...";
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Connecting...';
             
             await fetchAllData();
             
@@ -163,41 +178,72 @@
                 db.transactions = await txRes.json();
                 
                 refreshUI();
-            } catch (e) { alert("Failed to connect to Supabase database"); }
+            } catch (e) { alert("Failed to connect to Supabase database. Please check keys."); }
         }
 
         function refreshUI() {
-            // Dashboard
+            // Dashboard Stats
             let rev = 0, pend = 0;
             db.transactions.forEach(t => { 
-                if(t.status === 'Completed') rev += t.total; 
-                if(t.status === 'Pending') pend++; 
+                if(t.status === 'Deployed / Completed') rev += t.total; 
+                if(t.status === 'Pending Setup' || t.status === 'Pending') pend++; 
             });
-            document.getElementById('stat-revenue').textContent = "$" + rev.toLocaleString();
+            document.getElementById('stat-revenue').textContent = "$" + rev.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('stat-pending').textContent = pend;
             document.getElementById('stat-items').textContent = db.catalog.length;
 
-            // Catalog
+            // Catalog UI
             const cGrid = document.getElementById('catalog-grid'); cGrid.innerHTML = '';
             db.catalog.forEach(c => {
                 cGrid.innerHTML += `
-                    <div class="glass-card rounded-3xl p-6 relative">
-                        <button onclick='deleteCatalog(${c.id})' class="absolute top-4 right-4 text-red-500 font-bold">✕</button>
-                        <h3 class="text-xl font-bold mt-2">${c.name}</h3>
-                        <p class="text-xl font-black text-brand-600">$${c.price}</p>
+                    <div class="glass-card rounded-3xl p-6 relative flex flex-col h-full border border-slate-200 hover:border-brand-300 transition">
+                        <button onclick='deleteCatalog(${c.id})' class="absolute top-4 right-4 text-slate-300 hover:text-red-500 font-bold">✕</button>
+                        <h3 class="text-lg font-bold text-slate-900 pr-6 leading-tight">${c.name}</h3>
+                        <p class="text-xl font-black text-brand-600 mt-1 mb-4">$${c.price}</p>
+                        <p class="text-xs font-mono text-slate-500 bg-slate-100 p-2 rounded-lg truncate mt-auto">
+                            Demo: ${c.supplier || 'No Demo Link'}
+                        </p>
                     </div>`;
             });
 
-            // Transactions
+            // Transactions & Setup UI
             const tList = document.getElementById('tx-list'); tList.innerHTML = '';
+            if(db.transactions.length === 0) tList.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders yet.</td></tr>';
+            
             db.transactions.sort((a,b)=>b.id-a.id).forEach(t => {
+                // Ensure customer object exists to prevent errors
+                const cust = t.customer || {};
+                
+                // Formatting Onboarding Data
+                const domainBadge = cust.domainType === 'custom' 
+                    ? `<span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold">Custom Domain</span>`
+                    : `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold">Free Subdomain</span>`;
+
                 tList.innerHTML += `
-                    <tr class="hover:bg-slate-50 border-b">
-                        <td class="p-5 font-medium text-slate-500">#${t.id}</td>
-                        <td class="p-5"><b>${t.customer.name}</b><br><span class="text-xs text-slate-500">${t.customer.email}</span></td>
-                        <td class="p-5 font-bold text-brand-600">$${t.total}</td>
-                        <td class="p-5"><select onchange="updateOrderStatus(${t.id}, this.value)" class="px-2 py-1 border rounded bg-white text-xs font-bold"><option ${t.status==='Pending'?'selected':''}>Pending</option><option ${t.status==='Completed'?'selected':''}>Completed</option></select></td>
-                        <td class="p-5 text-right"><button onclick="deleteOrder(${t.id})" class="text-xs text-red-500 font-bold">Delete</button></td>
+                    <tr class="hover:bg-slate-50 border-b transition">
+                        <td class="p-5 font-medium text-slate-500 text-xs">#${t.id}</td>
+                        <td class="p-5">
+                            <b>${cust.name || 'Unknown'}</b><br>
+                            <span class="text-xs text-slate-500">${cust.email || 'No Email'}</span>
+                        </td>
+                        <td class="p-5">
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg text-xs shadow-sm">
+                                <b class="text-slate-800">Biz Name:</b> ${cust.businessName || 'Not Provided'}<br>
+                                <div class="mt-1 flex items-center gap-2">
+                                    ${domainBadge} <span class="font-mono text-slate-600 truncate max-w-[150px] inline-block">${cust.domainName || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-5 font-black text-slate-900">$${parseFloat(t.total).toFixed(2)}</td>
+                        <td class="p-5">
+                            <select onchange="updateOrderStatus(${t.id}, this.value)" class="px-3 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-brand-500">
+                                <option ${t.status==='Pending Setup' || t.status==='Pending'?'selected':''}>Pending Setup</option>
+                                <option ${t.status==='Deployed / Completed'?'selected':''}>Deployed / Completed</option>
+                            </select>
+                        </td>
+                        <td class="p-5 text-right">
+                            <button onclick="deleteOrder(${t.id})" class="text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 px-3 py-1.5 rounded-lg transition">Delete</button>
+                        </td>
                     </tr>`;
             });
         }
@@ -205,21 +251,32 @@
         // Database Mutations
         document.getElementById('catalog-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = e.submitter;
+            const originalText = btn.innerText;
+            btn.innerText = "Publishing...";
+
             const newItem = {
                 id: Date.now(),
                 name: document.getElementById('cat-name').value,
                 price: parseFloat(document.getElementById('cat-price').value),
                 image: document.getElementById('cat-image').value,
-                type: 'Product', stock: null
+                description: document.getElementById('cat-desc').value,
+                supplier: document.getElementById('cat-demo').value, // Used for Demo URL
+                type: 'Website', 
+                stock: null // Null triggers "Digital Goods" styling
             };
             
-            await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(newItem) });
-            document.getElementById('modal-catalog').classList.add('hidden');
-            fetchAllData(); // Refresh table
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(newItem) });
+                document.getElementById('modal-catalog').classList.add('hidden');
+                document.getElementById('catalog-form').reset();
+                await fetchAllData();
+            } catch (err) { alert("Failed to add product"); }
+            finally { btn.innerText = originalText; }
         });
 
         async function deleteCatalog(id) {
-            if(confirm("Delete this product?")) {
+            if(confirm("Remove this template from your storefront?")) {
                 await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}`, { method: 'DELETE', headers });
                 fetchAllData();
             }
@@ -231,7 +288,7 @@
         }
 
         async function deleteOrder(id) {
-            if(confirm("Delete this order?")) {
+            if(confirm("Delete this order record permanently?")) {
                 await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'DELETE', headers });
                 fetchAllData();
             }
