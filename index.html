@@ -1,145 +1,92 @@
-<!-- ... existing code ... -->
-                    <div class="flex items-center gap-2 mb-2 text-indigo-700">
-                        <i class="ph-bold ph-images text-lg"></i>
-                        <span class="font-bold text-sm">Product Page Upgrades</span>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-slate-500 block mb-1">Media Gallery (Paste Image URLs or YouTube Links, separated by commas)</label>
-                        <textarea id="cat-gallery" rows="2" placeholder="https://img1.jpg, https://youtube.com/watch?v=..." class="w-full p-3 bg-white border border-indigo-100 rounded-xl outline-none focus:border-indigo-400"></textarea>
-                        <p class="text-[10px] text-slate-400 mt-1">Used for the image/video carousel on the dedicated product page.</p>
-                    </div>
-                    
-                    <div>
-                        <label class="text-xs font-bold text-slate-500 block mb-1">Full Detailed Description (For Product Page)</label>
-<!-- ... existing code ... -->
-```
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Softode | Own Your Digital Real Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Plus Jakarta Sans', 'sans-serif'], }, colors: { primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' }, accent: { 500: '#8b5cf6' } } }
+            }
+        }
+    </script>
+    <style>
+        .text-gradient { background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-tech { background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    
+    <nav class="fixed w-full z-50 bg-white/70 backdrop-blur-md border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="font-heading font-extrabold text-2xl tracking-tight flex items-center gap-2 text-slate-900">
+                <div class="w-8 h-8 rounded-lg bg-gradient-tech flex items-center justify-center text-white"><i class="ph-bold ph-lightning"></i></div>Soft<span class="text-primary-600">ode</span>
+            </a>
+            <a href="#products" class="inline-flex items-center justify-center bg-slate-900 text-white px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-primary-600 transition-all">Shop Now</a>
+        </div>
+    </nav>
 
-### 2. Update the Product Page (Smart YouTube Player & Direct Demo)
-This update removes the old Demo popup modal, makes the demo button a direct link, and adds the "Smart YouTube Player". It automatically extracts the YouTube thumbnail and embeds a playable video if you paste a YouTube link!
+    <section id="hero" class="pt-32 pb-20 md:pt-40 md:pb-32 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 text-primary-700 text-sm font-semibold mb-6">Managed Hosting Included</div>
+            <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 text-slate-900">Launch Your Digital <br class="hidden lg:block"><span class="text-gradient">Empire Instantly.</span></h1>
+            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-xl mx-auto leading-relaxed">Premium, production-ready website templates, admin panels, and custom software. Fully managed for your business.</p>
+        </div>
+    </section>
 
-```html:Product Details Showcase:product.html
-<!-- ... existing code ... -->
-            <!-- LEFT: Image Slider -->
-            <div class="w-full space-y-4 sticky top-6">
-                <!-- Main Big Image -->
-                <div id="main-image-container" class="w-full aspect-[4/3] bg-slate-100 rounded-3xl overflow-hidden border border-slate-200 shadow-sm transition-opacity duration-300">
-                    <img id="main-image" src="" alt="Product" class="w-full h-full object-cover">
-                </div>
-                <!-- Thumbnails row -->
-                <div id="thumbnail-container" class="flex gap-4 overflow-x-auto pb-2 hide-scrollbar">
-<!-- ... existing code ... -->
-                    <!-- THIS BUTTON ROUTES TO CHECKOUT -->
-                    <button id="checkout-btn" class="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-all shadow-lg flex items-center justify-center gap-2">
-                        Proceed to Checkout <i class="ph-bold ph-lock-key"></i>
-                    </button>
-                    
-                    <!-- Live Demo Link (Direct Link now) -->
-                    <div id="demo-container" class="mt-4 hidden">
-                        <a id="demo-btn" href="#" target="_blank" class="w-full py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-all text-sm flex items-center justify-center gap-2">
-                            View Live Demo <i class="ph-bold ph-monitor-play"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Full Description / Features -->
-<!-- ... existing code ... -->
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-20 pt-8 pb-8">
-        <div class="max-w-7xl mx-auto px-6 text-center"><p class="text-sm text-slate-400 font-medium">© 2026 Softode. All rights reserved.</p></div>
-    </footer>
+    <section id="products" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16"><h2 class="font-heading text-4xl md:text-5xl font-bold mb-4 text-slate-900">Permanent Websites</h2></div>
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full text-center text-slate-400 py-10"><i class="ph ph-spinner animate-spin text-3xl"></i><br>Loading Catalog...</div>
+            </div>
+        </div>
+    </section>
 
     <script>
         const SUPABASE_URL = 'https://vzznqlxiolikyrzabgbb.supabase.co';
-<!-- ... existing code ... -->
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');
+        const SUPABASE_KEY = 'sb_publishable_1zHkc8FfhIZs41L3xuNMNQ_l9L6Ph8G';
+        const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' };
 
-        let currentImageArray = [];
+        async function loadCatalog() {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*`, { headers });
+                const products = await res.json();
+                
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = ''; 
 
-        // Helper function to extract a YouTube Video ID from any YT link
-        function getYoutubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
+                if (!products || products.length === 0) {
+                    grid.innerHTML = '<p class="col-span-full text-center text-slate-500 py-10">Storefront is empty.</p>';
+                    return;
+                }
 
-        async function fetchProductDetails() {
-<!-- ... existing code ... -->
-            document.getElementById('prod-price').innerText = `$${p.price}`;
-            document.getElementById('prod-full-desc').innerText = p.full_description || 'No detailed overview provided for this product.';
-            
-            // Demo Button Logic (Direct Link now)
-            if(p.supplier) { 
-                document.getElementById('demo-container').classList.remove('hidden');
-                const urls = p.supplier.split(',');
-                const frontendUrl = urls[0] ? urls[0].trim() : '#';
-                document.getElementById('demo-btn').href = frontendUrl;
-            }
-
-            // Checkout Button Setup (Pass the ID to the checkout page)
-<!-- ... existing code ... -->
-            // If they uploaded gallery images in Admin panel, add them to the array
-            if(p.image_gallery && Array.isArray(p.image_gallery)) {
-                currentImageArray = currentImageArray.concat(p.image_gallery);
-            }
-
-            // Set main image or video
-            changeMainImage(0);
-
-            // Build Thumbnails
-            const thumbContainer = document.getElementById('thumbnail-container');
-            thumbContainer.innerHTML = '';
-            
-            if(currentImageArray.length > 1) {
-                currentImageArray.forEach((url, index) => {
-                    const ytId = getYoutubeId(url);
-                    
-                    // If it's a YouTube link, grab the official YouTube thumbnail and overlay a Play button
-                    const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : url;
-                    const playIcon = ytId ? `<div class="absolute inset-0 flex items-center justify-center bg-black/40"><i class="ph-fill ph-play-circle text-white text-3xl"></i></div>` : '';
-                    
-                    const thumbState = index === 0 ? 'active-thumb' : 'inactive-thumb';
-                    thumbContainer.innerHTML += `
-                        <button onclick="changeMainImage(${index})" id="thumb-${index}" class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-slate-100 transition-all ${thumbState}">
-                            <img src="${thumbUrl}" class="w-full h-full object-cover pointer-events-none">
-                            ${playIcon}
-                        </button>
-                    `;
+                products.forEach(p => {
+                    grid.innerHTML += `
+                        <a href="product.html?id=${p.id}" class="block bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer h-full relative z-10">
+                            <div class="h-56 bg-slate-100 overflow-hidden relative">
+                                <img src="${p.image || 'https://placehold.co/600x400'}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            </div>
+                            <div class="p-8 flex flex-col flex-grow">
+                                <span class="text-[10px] font-black uppercase tracking-wider text-primary-600 bg-primary-50 px-2 py-1 rounded-md inline-block self-start mb-3">${p.category || 'Template'}</span>
+                                <h3 class="font-heading text-xl font-bold mb-2 text-slate-900">${p.name}</h3>
+                                <p class="text-slate-500 text-sm mb-6 line-clamp-2">${p.description || ''}</p>
+                                <div class="mb-6"><span class="text-3xl font-extrabold text-slate-900">$${p.price}</span></div>
+                                <div class="mt-auto">
+                                    <div class="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold group-hover:bg-primary-600 transition-all shadow-md flex items-center justify-center gap-2">View Details <i class="ph-bold ph-arrow-right"></i></div>
+                                </div>
+                            </div>
+                        </a>`;
                 });
+            } catch (err) { 
+                document.getElementById('product-grid').innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Error connecting to database.</p>';
             }
-
-            // Reveal Page
-<!-- ... existing code ... -->
-            document.getElementById('product-layout').classList.remove('hidden');
         }
-
-        // Javascript to swap the large image or embed YouTube when a thumbnail is clicked
-        function changeMainImage(index) {
-            const mainContainer = document.getElementById('main-image-container');
-            const url = currentImageArray[index];
-            const ytId = getYoutubeId(url);
-            
-            // Simple fade effect
-            mainContainer.style.opacity = 0;
-            setTimeout(() => {
-                if(ytId) {
-                    // Inject a playable YouTube iframe
-                    mainContainer.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                } else {
-                    // Inject a standard image
-                    mainContainer.innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
-                }
-                mainContainer.style.opacity = 1;
-            }, 150);
-
-            // Update thumbnail borders
-            currentImageArray.forEach((_, i) => {
-<!-- ... existing code ... -->
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchProductDetails);
+        loadCatalog();
     </script>
 </body>
 </html>
