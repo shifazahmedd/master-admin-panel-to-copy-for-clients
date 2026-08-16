@@ -13,7 +13,6 @@
     </style>
 </head>
 <body class="text-slate-800 flex h-screen overflow-hidden">
-
     <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex">
         <div class="h-20 flex items-center px-6 border-b border-slate-800">
             <div class="flex items-center gap-2 font-bold text-xl tracking-tight">
@@ -21,7 +20,7 @@
             </div>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-600 rounded-xl font-medium shadow-lg shadow-indigo-900/20"><i class="ph-bold ph-storefront text-lg"></i> Storefront</a>
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 bg-indigo-600 rounded-xl font-medium shadow-lg shadow-indigo-900/20"><i class="ph-bold ph-storefront text-lg"></i> Storefront</a>
         </nav>
     </aside>
 
@@ -32,8 +31,9 @@
                 <i class="ph-bold ph-plus"></i> Add New Product
             </button>
         </header>
-
+        
         <div class="flex-1 overflow-y-auto p-8">
+            <div id="error-box" class="hidden mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium"></div>
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -65,44 +65,42 @@
                     <input type="hidden" id="prod-id">
                     
                     <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Product Name</label><input type="text" id="prod-name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</label><input type="text" id="prod-category" placeholder="e.g. Template, Web App" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Product Name</label><input type="text" id="prod-name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</label><input type="text" id="prod-category" placeholder="e.g. Template, App" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Price ($)</label><input type="number" id="prod-price" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Demo Link (URL)</label><input type="url" id="prod-demo" placeholder="https://demo.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Price ($)</label><input type="number" id="prod-price" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Demo URL</label><input type="url" id="prod-demo" placeholder="https://demo.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Main Cover Image URL</label><input type="url" id="prod-image" required placeholder="https://..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort Order (Higher = First)</label><input type="number" id="prod-sort" placeholder="0" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Main Cover Image</label><input type="url" id="prod-image" required placeholder="https://..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
+                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort Order (Higher = Top)</label><input type="number" id="prod-sort" placeholder="0" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"></div>
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Short Description (For Homepage)</label>
-                        <textarea id="prod-desc" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Short Description (Homepage)</label>
+                        <textarea id="prod-desc" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"></textarea>
                     </div>
 
                     <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl space-y-4">
-                        <h3 class="text-sm font-bold text-indigo-900 flex items-center gap-2"><i class="ph-fill ph-star"></i> Product Page Details & Gallery</h3>
-                        
+                        <h3 class="text-sm font-bold text-indigo-900 flex items-center gap-2"><i class="ph-fill ph-star"></i> Product Page Details</h3>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Media Gallery (Images & YouTube links!)</label>
-                            <textarea id="prod-gallery" rows="2" placeholder="https://img1.jpg, https://youtube.com/watch?v=..." class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
-                            <p class="text-[10px] text-indigo-600 font-medium">Separate links with commas. YouTube links will automatically turn into playable videos on the product page!</p>
+                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Media Gallery (Images & YouTube URLs)</label>
+                            <textarea id="prod-gallery" rows="2" placeholder="https://img1.jpg, https://youtube.com/watch?v=..." class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"></textarea>
+                            <p class="text-[10px] text-indigo-600 font-medium">Separate links with commas. YouTube links will automatically play on the product page!</p>
                         </div>
-
                         <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Full Detailed Features (Text)</label>
-                            <textarea id="prod-full-desc" rows="4" placeholder="List all features, what's included, and FAQs here..." class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
+                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Full Detailed Features</label>
+                            <textarea id="prod-full-desc" rows="4" class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-3xl flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-all">Cancel</button>
-                <button onclick="saveProduct()" id="save-btn" class="px-6 py-2.5 text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl shadow-md transition-all flex items-center gap-2">Save Product</button>
+                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl">Cancel</button>
+                <button onclick="saveProduct()" id="save-btn" class="px-6 py-2.5 text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl flex items-center gap-2">Save Product</button>
             </div>
         </div>
     </div>
@@ -114,23 +112,32 @@
 
         let productsData = [];
 
+        function showError(msg) {
+            const errBox = document.getElementById('error-box');
+            errBox.innerText = msg;
+            errBox.classList.remove('hidden');
+            setTimeout(() => errBox.classList.add('hidden'), 8000);
+        }
+
         async function fetchProducts() {
             try {
-                // Fetch ordered by sort_order
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.desc,id.desc`, { headers });
+                // Try fetching with Sort Order first
+                let res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.desc,id.desc`, { headers });
                 
-                // Fallback if sort_order column doesn't exist yet
+                // If sorting fails (column missing), fallback to standard fetch
                 if (!res.ok) {
-                    console.warn("Sorting failed, loading without sort (Check if you added sort_order to DB)");
-                    const fallbackRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*`, { headers });
-                    productsData = await fallbackRes.json();
-                } else {
-                    productsData = await res.json();
+                    res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*`, { headers });
                 }
                 
-                renderTable();
+                if (res.ok) {
+                    productsData = await res.json();
+                    renderTable();
+                } else {
+                    throw new Error(await res.text());
+                }
             } catch (err) {
-                document.getElementById('product-table-body').innerHTML = `<tr><td colspan="5" class="text-center text-red-500 p-8 font-bold">Error loading database. Check connection.</td></tr>`;
+                showError("Database connection error: " + err.message);
+                document.getElementById('product-table-body').innerHTML = `<tr><td colspan="5" class="text-center text-red-500 p-8 font-bold">Failed to load data. See error above.</td></tr>`;
             }
         }
 
@@ -138,24 +145,27 @@
             const tbody = document.getElementById('product-table-body');
             tbody.innerHTML = '';
             if (!productsData || productsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-medium">Your store is empty. Add a product!</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-medium">Your store is empty.</td></tr>`;
                 return;
             }
             productsData.forEach(p => {
+                // Safely handle array or string galleries
+                let galleryString = '';
+                if(Array.isArray(p.image_gallery)) galleryString = p.image_gallery.join(', ');
+                else if(typeof p.image_gallery === 'string') galleryString = p.image_gallery;
+
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group">
-                        <td class="p-4 pl-6">
-                            <div class="flex items-center gap-4">
-                                <img src="${p.image || 'https://placehold.co/100'}" class="w-12 h-12 rounded-lg object-cover bg-slate-100 border border-slate-200">
-                                <div><p class="font-bold text-slate-800">${p.name}</p></div>
-                            </div>
+                    <tr class="hover:bg-slate-50 border-b border-slate-50 group">
+                        <td class="p-4 pl-6 flex items-center gap-4">
+                            <img src="${p.image || 'https://placehold.co/100'}" class="w-12 h-12 rounded-lg object-cover bg-slate-100">
+                            <p class="font-bold text-slate-800">${p.name}</p>
                         </td>
                         <td class="p-4"><span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-md">${p.category || 'Template'}</span></td>
                         <td class="p-4 font-bold text-slate-500">${p.sort_order || 0}</td>
                         <td class="p-4 font-bold text-slate-800">$${p.price}</td>
-                        <td class="p-4 pr-6 text-right space-x-2">
-                            <button onclick="editProduct(${p.id})" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
-                            <button onclick="deleteProduct(${p.id})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i class="ph-bold ph-trash text-lg"></i></button>
+                        <td class="p-4 pr-6 text-right">
+                            <button onclick='editProduct(${JSON.stringify(p).replace(/'/g, "\\'")})' class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
+                            <button onclick="deleteProduct(${p.id})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i class="ph-bold ph-trash text-lg"></i></button>
                         </td>
                     </tr>`;
             });
@@ -170,9 +180,7 @@
 
         function closeModal() { document.getElementById('product-modal').classList.add('hidden'); }
 
-        function editProduct(id) {
-            const p = productsData.find(x => x.id === id);
-            if(!p) return;
+        function editProduct(p) {
             document.getElementById('prod-id').value = p.id;
             document.getElementById('prod-name').value = p.name || '';
             document.getElementById('prod-category').value = p.category || '';
@@ -180,9 +188,13 @@
             document.getElementById('prod-image').value = p.image || '';
             document.getElementById('prod-desc').value = p.description || '';
             document.getElementById('prod-demo').value = p.supplier || '';
-            document.getElementById('prod-gallery').value = p.image_gallery || '';
-            document.getElementById('prod-full-desc').value = p.full_description || '';
             document.getElementById('prod-sort').value = p.sort_order || 0;
+            document.getElementById('prod-full-desc').value = p.full_description || '';
+            
+            let gStr = '';
+            if(Array.isArray(p.image_gallery)) gStr = p.image_gallery.join(', ');
+            else if(typeof p.image_gallery === 'string') gStr = p.image_gallery;
+            document.getElementById('prod-gallery').value = gStr;
             
             document.getElementById('modal-title').innerText = 'Edit Product';
             document.getElementById('product-modal').classList.remove('hidden');
@@ -191,17 +203,21 @@
         async function saveProduct() {
             const btn = document.getElementById('save-btn');
             btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
+            btn.disabled = true;
             
             const id = document.getElementById('prod-id').value;
+            
+            // Format Gallery as plain text to prevent JSONB type mismatches!
+            const rawGallery = document.getElementById('prod-gallery').value;
             
             const payload = {
                 name: document.getElementById('prod-name').value,
                 category: document.getElementById('prod-category').value,
-                price: parseFloat(document.getElementById('prod-price').value),
+                price: parseFloat(document.getElementById('prod-price').value) || 0,
                 image: document.getElementById('prod-image').value,
                 description: document.getElementById('prod-desc').value,
                 supplier: document.getElementById('prod-demo').value,
-                image_gallery: document.getElementById('prod-gallery').value,
+                image_gallery: rawGallery, 
                 full_description: document.getElementById('prod-full-desc').value,
                 sort_order: parseInt(document.getElementById('prod-sort').value) || 0
             };
@@ -213,22 +229,22 @@
                 const res = await fetch(url, { method, headers, body: JSON.stringify(payload) });
                 
                 if (!res.ok) {
-                    // Safe error catcher if Database misses columns!
                     const errInfo = await res.text();
-                    alert("Database Save Error: Check if you ran the SQL command to add 'image_gallery' or 'full_description' columns!\n\nDetails: " + errInfo);
+                    showError("Save Failed. Database Error: " + errInfo);
                 } else {
                     closeModal();
                     fetchProducts();
                 }
             } catch (err) { 
-                alert("Failed to connect. Check internet connection."); 
+                showError("Network Error. Cannot reach Supabase.");
             }
             
             btn.innerHTML = 'Save Product';
+            btn.disabled = false;
         }
 
         async function deleteProduct(id) {
-            if(confirm("Are you sure you want to delete this product?")) {
+            if(confirm("Delete this product permanently?")) {
                 await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}`, { method: 'DELETE', headers });
                 fetchProducts();
             }
