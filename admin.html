@@ -3,220 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniDash Pro | Admin</title>
+    <title>OmniDash Pro - Cloud HQ</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], }, colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' } } } }
+        }
+    </script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="text-slate-800 flex h-screen overflow-hidden">
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden antialiased">
 
-    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex">
-        <div class="h-20 flex items-center px-6 border-b border-slate-800">
-            <div class="flex items-center gap-2 font-bold text-xl tracking-tight">
-                <i class="ph-fill ph-hexagon text-indigo-500 text-2xl"></i> OmniDash
+    <!-- LOGIN SCREEN -->
+    <div id="auth-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 p-4">
+        <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md relative z-10 border border-slate-100">
+            <div class="flex justify-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg text-white">
+                    <i class="ph-bold ph-lightning text-3xl"></i>
+                </div>
             </div>
-        </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-600 rounded-xl font-medium shadow-lg shadow-indigo-900/20"><i class="ph-bold ph-storefront text-lg"></i> Storefront</a>
-        </nav>
-    </aside>
-
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-        <header class="h-20 glass-panel border-b border-slate-200 flex items-center justify-between px-8 z-10">
-            <h1 class="text-xl font-bold text-slate-800">Product Management</h1>
-            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md flex items-center gap-2">
-                <i class="ph-bold ph-plus"></i> Add New Product
-            </button>
-        </header>
-
-        <div class="flex-1 overflow-y-auto p-8">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider font-semibold">
-                            <th class="p-4 pl-6">Product</th>
-                            <th class="p-4">Category</th>
-                            <th class="p-4">Sort Order</th>
-                            <th class="p-4">Price</th>
-                            <th class="p-4 text-right pr-6">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="product-table-body" class="divide-y divide-slate-100">
-                        <tr><td colspan="5" class="p-8 text-center text-slate-400"><i class="ph ph-spinner animate-spin text-3xl mb-2"></i><br>Loading catalog...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <div id="product-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-3xl">
-                <h2 id="modal-title" class="text-xl font-bold text-slate-800">Add New Product</h2>
-                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 transition-colors"><i class="ph-bold ph-x"></i></button>
-            </div>
+            <h1 class="text-3xl font-extrabold text-center text-slate-900">Softode Admin</h1>
+            <p class="text-center text-slate-500 mt-2 mb-8 text-sm font-medium">Cloud Database Connected</p>
             
-            <div class="p-6 overflow-y-auto flex-1">
-                <form id="product-form" class="space-y-5">
-                    <input type="hidden" id="prod-id">
-                    
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Product Name</label><input type="text" id="prod-name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</label><input type="text" id="prod-category" placeholder="e.g. Template, Web App" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"></div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Price ($)</label><input type="number" id="prod-price" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Demo Link (URL)</label><input type="url" id="prod-demo" placeholder="https://demo.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Main Cover Image URL</label><input type="url" id="prod-image" required placeholder="https://..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                        <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort Order (Higher = First)</label><input type="number" id="prod-sort" placeholder="0" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all"></div>
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Short Description (For Homepage)</label>
-                        <textarea id="prod-desc" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
-                    </div>
-
-                    <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl space-y-4">
-                        <h3 class="text-sm font-bold text-indigo-900 flex items-center gap-2"><i class="ph-fill ph-star"></i> Dedicated Product Page Details</h3>
-                        
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Media Gallery (Images & YouTube links!)</label>
-                            <textarea id="prod-gallery" rows="2" placeholder="https://img1.jpg, https://youtube.com/watch?v=..." class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
-                            <p class="text-[10px] text-indigo-600 font-medium">Separate links with commas. YouTube links will automatically turn into playable videos!</p>
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Full Detailed Features (Text)</label>
-                            <textarea id="prod-full-desc" rows="4" placeholder="List all features, what's included, and FAQs here..." class="w-full px-4 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm focus:border-indigo-500 outline-none transition-all resize-none"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-3xl flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-all">Cancel</button>
-                <button onclick="saveProduct()" id="save-btn" class="px-6 py-2.5 text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl shadow-md transition-all flex items-center gap-2">Save Product</button>
-            </div>
+            <form id="login-form" class="space-y-5">
+                <button type="submit" id="login-btn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-database"></i> Connect to Supabase
+                </button>
+            </form>
         </div>
     </div>
 
+    <!-- MAIN APP LAYOUT -->
+    <div id="app-layout" class="hidden w-full h-full flex-col md:flex-row relative">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col md:relative md:flex-shrink-0 shadow-2xl md:shadow-none">
+            <div class="p-6 flex items-center gap-3 border-b border-slate-100">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md font-bold text-xl">S</div>
+                <div><h2 class="text-slate-900 font-extrabold text-lg leading-tight">Softode</h2><p class="text-[10px] font-black text-brand-600 uppercase tracking-widest">Admin Panel</p></div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold"><i class="ph-bold ph-squares-four text-xl"></i> Dashboard</button>
+                <button onclick="switchTab('transactions')" id="nav-transactions" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><i class="ph-bold ph-receipt text-xl"></i> Live Orders</button>
+                <button onclick="switchTab('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold"><i class="ph-bold ph-storefront text-xl"></i> Catalog Manager</button>
+            </nav>
+            <div class="p-4 border-t border-slate-100"><button onclick="location.reload()" class="w-full py-2.5 text-sm text-red-600 font-bold hover:bg-red-50 rounded-lg">Disconnect</button></div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto relative bg-slate-50/50">
+            <div class="p-4 md:p-8 w-full max-w-7xl mx-auto pb-24">
+                
+                <!-- DASHBOARD -->
+                <div id="view-dashboard" class="block animate-fade-in">
+                    <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900">Dashboard</h2></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-brand-500"><p class="text-sm font-bold text-slate-500 uppercase">Total Revenue</p><p class="text-3xl font-black text-slate-900" id="stat-revenue">$0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-amber-500"><p class="text-sm font-bold text-slate-500 uppercase">Sites Pending Setup</p><p class="text-3xl font-black text-amber-600" id="stat-pending">0</p></div>
+                        <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-emerald-500"><p class="text-sm font-bold text-slate-500 uppercase">Active Catalog Items</p><p class="text-3xl font-black text-emerald-600" id="stat-items">0</p></div>
+                    </div>
+                </div>
+
+                <!-- ORDERS & DEPLOYMENTS -->
+                <div id="view-transactions" class="hidden animate-fade-in">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Live Orders & Client Setup</h2>
+                        <p class="text-slate-500 mt-1">Manage new purchases and view client domain requests.</p>
+                    </div>
+                    <div class="glass-card rounded-3xl shadow-sm overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50/80">
+                                <tr class="border-b border-slate-200 text-slate-500 text-xs uppercase font-bold">
+                                    <th class="p-5">Order ID</th>
+                                    <th class="p-5">Client Contact</th>
+                                    <th class="p-5">Product Details</th>
+                                    <th class="p-5">Total Paid</th>
+                                    <th class="p-5">Status</th>
+                                    <th class="p-5 text-right">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tx-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CATALOG -->
+                <div id="view-catalog" class="hidden animate-fade-in">
+                    <div class="mb-8 flex justify-between items-end gap-4">
+                        <div>
+                            <h2 class="text-3xl font-extrabold text-slate-900">Catalog Manager</h2>
+                            <p class="text-slate-500 mt-1">Add, edit, and manage products on your storefront.</p>
+                        </div>
+                        <button onclick="openCatalogModal()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
+                            <i class="ph-bold ph-plus"></i> Add Product
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="catalog-grid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CATALOG MODAL -->
+    <div id="modal-catalog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 overflow-y-auto max-h-[90vh]">
+            <h3 id="modal-catalog-title" class="text-xl font-extrabold text-slate-900 mb-4">Add Template to Store</h3>
+            <form id="catalog-form" class="space-y-4">
+                <input type="hidden" id="cat-id"> <!-- Hidden ID for Editing -->
+                
+                <div>
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Product/Template Name</label>
+                    <input type="text" id="cat-name" required placeholder="e.g., Leaf & Latte Coffee" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Price ($)</label>
+                        <input type="number" id="cat-price" required class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Category / Type</label>
+                        <input type="text" id="cat-category" required placeholder="e.g., Permanent Website" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-brand-600 block mb-1">Live Demo URL (Optional)</label>
+                    <input type="text" id="cat-demo" placeholder="https://coffe-demo.netlify.app" class="w-full p-3 bg-brand-50 border border-brand-100 rounded-xl outline-none focus:border-brand-500">
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Main Cover Image URL</label>
+                    <input type="text" id="cat-image" placeholder="Primary Thumbnail Image" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500">
+                </div>
+                
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl space-y-4">
+                    <div class="flex items-center gap-2 mb-2 text-indigo-700">
+                        <i class="ph-bold ph-images text-lg"></i>
+                        <span class="font-bold text-sm">Product Page Upgrades</span>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Additional Media (Comma separated Image or YouTube URLs)</label>
+                        <textarea id="cat-gallery" rows="2" placeholder="https://img1.jpg, https://youtube.com/watch?v=..." class="w-full p-3 bg-white border border-indigo-100 rounded-xl outline-none focus:border-indigo-400"></textarea>
+                        <p class="text-[10px] text-slate-400 mt-1">Used for the media carousel. Paste YouTube links to automatically embed videos.</p>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 block mb-1">Full Detailed Description (For Product Page)</label>
+                        <textarea id="cat-full-desc" rows="4" placeholder="Write paragraphs of details, features, FAQs..." class="w-full p-3 bg-white border border-indigo-100 rounded-xl outline-none focus:border-indigo-400"></textarea>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Short Description (For Front Page Card)</label>
+                    <textarea id="cat-desc" rows="2" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-brand-500"></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-3 mt-4">
+                    <button type="button" onclick="closeCatalogModal()" class="px-6 py-3 bg-slate-100 rounded-xl font-bold">Cancel</button>
+                    <button type="submit" class="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold shadow-md">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SUPABASE JAVASCRIPT LOGIC -->
     <script>
         const SUPABASE_URL = 'https://vzznqlxiolikyrzabgbb.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_1zHkc8FfhIZs41L3xuNMNQ_l9L6Ph8G';
         const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
 
-        let productsData = [];
+        let db = { catalog: [], transactions: [] };
 
-        async function fetchProducts() {
+        // Navigation
+        function switchTab(tabId) {
+            ['dashboard', 'transactions', 'catalog'].forEach(id => {
+                document.getElementById('view-' + id).classList.add('hidden');
+                document.getElementById('nav-' + id).className = 'w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl font-semibold transition';
+            });
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            let iconClass = tabId === 'dashboard' ? 'ph-squares-four' : tabId === 'transactions' ? 'ph-receipt' : 'ph-storefront';
+            document.getElementById('nav-' + tabId).className = `w-full flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition`;
+        }
+
+        // Login / Connect
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Connecting...';
+            
+            await fetchAllData();
+            
+            document.getElementById('auth-view').classList.add('hidden');
+            document.getElementById('app-layout').classList.remove('hidden');
+            document.getElementById('app-layout').classList.add('flex');
+            switchTab('dashboard');
+        });
+
+        // Data Fetching
+        async function fetchAllData() {
             try {
-                // Fetch ordered by the new sort_order column
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.desc,id.desc`, { headers });
-                productsData = await res.json();
-                renderTable();
-            } catch (err) {
-                document.getElementById('product-table-body').innerHTML = `<tr><td colspan="5" class="text-center text-red-500 p-8 font-bold">Error loading database. Make sure you ran the SQL script!</td></tr>`;
+                // Fetch Catalog ordered by sort_order
+                const catRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.asc`, { headers });
+                db.catalog = await catRes.json();
+
+                const txRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*`, { headers });
+                db.transactions = await txRes.json();
+                
+                refreshUI();
+            } catch (e) { 
+                alert("Failed to connect to Supabase database. Please check keys or ensure SQL tables are created."); 
+                console.error(e);
             }
         }
 
-        function renderTable() {
-            const tbody = document.getElementById('product-table-body');
-            tbody.innerHTML = '';
-            if (!productsData || productsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-medium">Your store is empty. Add a product!</td></tr>`;
-                return;
-            }
-            productsData.forEach(p => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group">
-                        <td class="p-4 pl-6">
-                            <div class="flex items-center gap-4">
-                                <img src="${p.image || 'https://placehold.co/100'}" class="w-12 h-12 rounded-lg object-cover bg-slate-100 border border-slate-200">
-                                <div><p class="font-bold text-slate-800">${p.name}</p></div>
+        function refreshUI() {
+            // Dashboard Stats
+            let rev = 0, pend = 0;
+            db.transactions.forEach(t => { 
+                if(t.status === 'Deployed / Completed' || t.status === 'completed') rev += parseFloat(t.total || t.amount || 0); 
+                if(t.status === 'Pending Setup' || t.status === 'Pending') pend++; 
+            });
+            document.getElementById('stat-revenue').textContent = "$" + rev.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('stat-pending').textContent = pend;
+            document.getElementById('stat-items').textContent = db.catalog.length;
+
+            // Catalog UI (With Edit & Sort Buttons)
+            const cGrid = document.getElementById('catalog-grid'); cGrid.innerHTML = '';
+            db.catalog.forEach((c, index) => {
+                cGrid.innerHTML += `
+                    <div class="glass-card rounded-3xl p-6 relative flex flex-col h-full border border-slate-200 hover:border-brand-300 transition shadow-sm">
+                        
+                        <!-- Top Actions (Delete & Edit) -->
+                        <div class="absolute top-4 right-4 flex gap-2">
+                            <button onclick='openEditModal(${c.id})' class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-brand-100 hover:text-brand-600 transition" title="Edit">
+                                <i class="ph-bold ph-pencil-simple"></i>
+                            </button>
+                            <button onclick='deleteCatalog(${c.id})' class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-100 hover:text-red-500 transition" title="Delete">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Reorder Arrows -->
+                        <div class="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
+                            <button onclick="moveCatalogItem(${index}, 'up')" class="${index === 0 ? 'invisible' : ''} w-8 h-8 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-brand-600 hover:border-brand-300 transition">
+                                <i class="ph-bold ph-caret-up"></i>
+                            </button>
+                            <button onclick="moveCatalogItem(${index}, 'down')" class="${index === db.catalog.length - 1 ? 'invisible' : ''} w-8 h-8 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-brand-600 hover:border-brand-300 transition">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </button>
+                        </div>
+
+                        <span class="text-[10px] font-black uppercase tracking-wider text-brand-600 bg-brand-50 px-2 py-1 rounded-md inline-block self-start mb-3">
+                            ${c.category || 'Template'}
+                        </span>
+                        
+                        <h3 class="text-lg font-bold text-slate-900 pr-16 leading-tight">${c.name}</h3>
+                        <p class="text-2xl font-black text-slate-900 mt-1 mb-4">$${c.price}</p>
+                        
+                        <div class="h-32 w-full rounded-xl overflow-hidden bg-slate-100 mb-4">
+                            <img src="${c.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'}" class="w-full h-full object-cover">
+                        </div>
+
+                        <p class="text-xs font-mono text-slate-500 bg-slate-50 border border-slate-100 p-2 rounded-lg truncate mt-auto">
+                            Demo: ${c.supplier || 'None'}
+                        </p>
+                    </div>`;
+            });
+
+            // Transactions & Setup UI
+            const tList = document.getElementById('tx-list'); tList.innerHTML = '';
+            if(db.transactions.length === 0) tList.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders yet.</td></tr>';
+            
+            db.transactions.sort((a,b)=>b.id-a.id).forEach(t => {
+                // Handling both new Supabase structure and old JSON structure
+                const customerName = t.customer_name || (t.customer ? t.customer.name : 'Unknown');
+                const customerEmail = t.customer_email || (t.customer ? t.customer.email : 'No Email');
+                const productName = t.product_name || (t.items && t.items[0] ? 'Item ID: ' + t.items[0].catalogId : 'Unknown Product');
+                const total = parseFloat(t.amount || t.total || 0).toFixed(2);
+
+                tList.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b transition">
+                        <td class="p-5 font-medium text-slate-500 text-xs">#${t.id || 'N/A'}</td>
+                        <td class="p-5">
+                            <b>${customerName}</b><br>
+                            <span class="text-xs text-slate-500">${customerEmail}</span>
+                        </td>
+                        <td class="p-5">
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg text-xs shadow-sm">
+                                <b class="text-slate-800">${productName}</b>
                             </div>
                         </td>
-                        <td class="p-4"><span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-md">${p.category || 'Template'}</span></td>
-                        <td class="p-4 font-bold text-slate-500">${p.sort_order || 0}</td>
-                        <td class="p-4 font-bold text-slate-800">$${p.price}</td>
-                        <td class="p-4 pr-6 text-right space-x-2">
-                            <button onclick="editProduct(${p.id})" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
-                            <button onclick="deleteProduct(${p.id})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i class="ph-bold ph-trash text-lg"></i></button>
+                        <td class="p-5 font-black text-slate-900">$${total}</td>
+                        <td class="p-5">
+                            <select onchange="updateOrderStatus(${t.id || t.transactionId}, this.value)" class="px-3 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-brand-500">
+                                <option value="Pending" ${t.status==='Pending Setup' || t.status==='Pending'?'selected':''}>Pending</option>
+                                <option value="completed" ${(t.status==='Deployed / Completed' || t.status==='completed')?'selected':''}>Completed</option>
+                            </select>
+                        </td>
+                        <td class="p-5 text-right">
+                            <button onclick="deleteOrder(${t.id})" class="text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 px-3 py-1.5 rounded-lg transition">Delete</button>
                         </td>
                     </tr>`;
             });
         }
 
-        function openModal() {
-            document.getElementById('product-form').reset();
-            document.getElementById('prod-id').value = '';
-            document.getElementById('modal-title').innerText = 'Add New Product';
-            document.getElementById('product-modal').classList.remove('hidden');
+        // --- CATALOG ACTIONS ---
+        function openCatalogModal() {
+            document.getElementById('catalog-form').reset();
+            document.getElementById('cat-id').value = '';
+            document.getElementById('modal-catalog-title').innerText = "Add New Product";
+            document.getElementById('modal-catalog').classList.remove('hidden');
         }
 
-        function closeModal() { document.getElementById('product-modal').classList.add('hidden'); }
-
-        function editProduct(id) {
-            const p = productsData.find(x => x.id === id);
-            if(!p) return;
-            document.getElementById('prod-id').value = p.id;
-            document.getElementById('prod-name').value = p.name || '';
-            document.getElementById('prod-category').value = p.category || '';
-            document.getElementById('prod-price').value = p.price || 0;
-            document.getElementById('prod-image').value = p.image || '';
-            document.getElementById('prod-desc').value = p.description || '';
-            document.getElementById('prod-demo').value = p.supplier || '';
-            document.getElementById('prod-gallery').value = p.image_gallery || '';
-            document.getElementById('prod-full-desc').value = p.full_description || '';
-            document.getElementById('prod-sort').value = p.sort_order || 0;
+        function openEditModal(id) {
+            const item = db.catalog.find(c => c.id === id);
+            if(!item) return;
             
-            document.getElementById('modal-title').innerText = 'Edit Product';
-            document.getElementById('product-modal').classList.remove('hidden');
+            document.getElementById('cat-id').value = item.id;
+            document.getElementById('cat-name').value = item.name;
+            document.getElementById('cat-price').value = item.price;
+            document.getElementById('cat-category').value = item.category || 'Templates';
+            document.getElementById('cat-demo').value = item.supplier || '';
+            document.getElementById('cat-image').value = item.image || '';
+            document.getElementById('cat-desc').value = item.description || '';
+            
+            // New Fields for Product Page
+            document.getElementById('cat-gallery').value = (item.image_gallery || []).join(', ');
+            document.getElementById('cat-full-desc').value = item.full_description || '';
+            
+            document.getElementById('modal-catalog-title').innerText = "Edit Product";
+            document.getElementById('modal-catalog').classList.remove('hidden');
         }
 
-        async function saveProduct() {
-            const btn = document.getElementById('save-btn');
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
+        function closeCatalogModal() {
+            document.getElementById('modal-catalog').classList.add('hidden');
+        }
+
+        // Submit Add / Edit
+        document.getElementById('catalog-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.submitter;
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Saving...';
+
+            const catId = document.getElementById('cat-id').value;
             
-            const id = document.getElementById('prod-id').value;
-            
-            const payload = {
-                name: document.getElementById('prod-name').value,
-                category: document.getElementById('prod-category').value,
-                price: parseFloat(document.getElementById('prod-price').value),
-                image: document.getElementById('prod-image').value,
-                description: document.getElementById('prod-desc').value,
-                supplier: document.getElementById('prod-demo').value,
-                image_gallery: document.getElementById('prod-gallery').value,
-                full_description: document.getElementById('prod-full-desc').value,
-                sort_order: parseInt(document.getElementById('prod-sort').value) || 0
+            // Parse comma separated URLs into an array
+            const galleryInput = document.getElementById('cat-gallery').value;
+            const image_gallery = galleryInput ? galleryInput.split(',').map(url => url.trim()).filter(url => url !== '') : [];
+
+            const itemData = {
+                name: document.getElementById('cat-name').value,
+                price: parseFloat(document.getElementById('cat-price').value),
+                category: document.getElementById('cat-category').value,
+                image: document.getElementById('cat-image').value,
+                description: document.getElementById('cat-desc').value,
+                supplier: document.getElementById('cat-demo').value, 
+                image_gallery: image_gallery,
+                full_description: document.getElementById('cat-full-desc').value,
+                type: 'Website', 
+                stock: null 
             };
-
-            try {
-                const method = id ? 'PATCH' : 'POST';
-                const url = id ? `${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/catalog`;
-                
-                await fetch(url, { method, headers, body: JSON.stringify(payload) });
-                closeModal();
-                fetchProducts();
-            } catch (err) { alert("Failed to save. Check internet connection."); }
             
-            btn.innerHTML = 'Save Product';
-        }
+            try {
+                if (catId) {
+                    // UPDATE Existing
+                    await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${catId}`, { method: 'PATCH', headers, body: JSON.stringify(itemData) });
+                } else {
+                    // CREATE New
+                    itemData.id = Date.now();
+                    itemData.sort_order = db.catalog.length; // Place at the end
+                    await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(itemData) });
+                }
+                closeCatalogModal();
+                await fetchAllData();
+            } catch (err) { alert("Failed to save product"); console.error(err); }
+            finally { btn.innerText = originalText; }
+        });
 
-        async function deleteProduct(id) {
-            if(confirm("Are you sure you want to delete this product?")) {
-                await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}`, { method: 'DELETE', headers });
-                fetchProducts();
+        // Reordering Logic
+        async function moveCatalogItem(index, direction) {
+            if (direction === 'up' && index > 0) {
+                let current = db.catalog[index];
+                let previous = db.catalog[index - 1];
+                
+                let tempOrder = current.sort_order;
+                current.sort_order = previous.sort_order;
+                previous.sort_order = tempOrder;
+
+                await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${current.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: current.sort_order }) }),
+                    fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${previous.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: previous.sort_order }) })
+                ]);
+                await fetchAllData();
+
+            } else if (direction === 'down' && index < db.catalog.length - 1) {
+                let current = db.catalog[index];
+                let next = db.catalog[index + 1];
+                
+                let tempOrder = current.sort_order;
+                current.sort_order = next.sort_order;
+                next.sort_order = tempOrder;
+
+                await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${current.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: current.sort_order }) }),
+                    fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${next.id}`, { method: 'PATCH', headers, body: JSON.stringify({ sort_order: next.sort_order }) })
+                ]);
+                await fetchAllData();
             }
         }
 
-        fetchProducts();
+        async function deleteCatalog(id) {
+            if(confirm("Remove this item from your storefront?")) {
+                await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${id}`, { method: 'DELETE', headers });
+                fetchAllData();
+            }
+        }
+
+        // --- ORDER ACTIONS ---
+        async function updateOrderStatus(id, newStatus) {
+            await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'PATCH', headers, body: JSON.stringify({ status: newStatus }) });
+            fetchAllData();
+        }
+
+        async function deleteOrder(id) {
+            if(!id) return;
+            if(confirm("Delete this order record permanently?")) {
+                await fetch(`${SUPABASE_URL}/rest/v1/transactions?id=eq.${id}`, { method: 'DELETE', headers });
+                fetchAllData();
+            }
+        }
     </script>
 </body>
 </html>
