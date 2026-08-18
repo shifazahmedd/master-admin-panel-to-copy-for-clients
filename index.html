@@ -216,11 +216,11 @@
         // Data Fetching
         async function fetchAllData() {
             try {
-                // Fetch Catalog ordered by sort_order
-                const catRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.asc`, { headers });
+                // Fetch Catalog ordered by sort_order (with cache buster)
+                const catRes = await fetch(`${SUPABASE_URL}/rest/v1/catalog?select=*&order=sort_order.asc&nocache=${Date.now()}`, { headers });
                 db.catalog = await catRes.json();
 
-                const txRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*`, { headers });
+                const txRes = await fetch(`${SUPABASE_URL}/rest/v1/transactions?select=*&nocache=${Date.now()}`, { headers });
                 db.transactions = await txRes.json();
                 
                 refreshUI();
