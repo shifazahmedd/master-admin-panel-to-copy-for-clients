@@ -380,18 +380,38 @@
             };
             
             try {
+                let res;
                 if (catId) {
                     // UPDATE Existing
-                    await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${catId}`, { method: 'PATCH', headers, body: JSON.stringify(itemData) });
+                    res = await fetch(`${SUPABASE_URL}/rest/v1/catalog?id=eq.${catId}`, { method: 'PATCH', headers, body: JSON.stringify(itemData) });
                 } else {
                     // CREATE New
                     itemData.id = Date.now();
                     itemData.sort_order = db.catalog.length; // Place at the end
-                    await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(itemData) });
+                    res = await fetch(`${SUPABASE_URL}/rest/v1/catalog`, { method: 'POST', headers, body: JSON.stringify(itemData) });
                 }
+                
+                // NEW FIX: Alarm system to catch silent Supabase rejections!
+                if (!res.ok) {
+                    const errData = await res.json();
+                    alert("SUPABASE ERROR:\n" + (errData.message || JSON.stringify(errData)));
+                    throw new Error("Database rejected the save");
+                }
+                
+                const responseData = await res.json();
+                if (Array.isArray(responseData) && responseData.length === 0) {
+                    alert("SUPABASE SECURITY ERROR:\nThe save was blocked because your Supabase table is locked (Row Level Security is enabled).");
+                    throw new Error("RLS blocked the save");
+                }
+
                 closeCatalogModal();
                 await fetchAllData();
-            } catch (err) { alert("Failed to save product"); console.error(err); }
+            } catch (err) { 
+                console.error(err); 
+                if (!err.message.includes("Database") && !err.message.includes("RLS")) {
+                    alert("Network error: Could not reach Supabase.");
+                }
+            }
             finally { btn.innerText = originalText; }
         });
 
